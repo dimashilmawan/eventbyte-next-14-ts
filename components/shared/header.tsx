@@ -4,19 +4,13 @@ import { NavItems } from "./nav-items";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { MobileNav } from "./mobile-nav";
+import { Logo } from "./logo";
 
 export const Header = () => {
   return (
     <header className="w-full border-b ">
-      <div className="flex-between wrapper py-4">
-        <Link className="w-32" href="/">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="Logo Image"
-            width={128}
-            height={38}
-          />
-        </Link>
+      <div className="flex-between wrapper py-4 ">
+        <Logo />
         <nav className="hidden w-fit md:flex">
           <NavItems />
         </nav>
