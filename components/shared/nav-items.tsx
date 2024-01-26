@@ -12,7 +12,7 @@ export const NavItems = () => {
         return (
           <li
             key={link.route}
-            className={`${isActive ? "text-primary-500" : ""} whitespace-nowrap  text-2xl font-medium`}
+            className={`${isActive ? "text-primary-500" : ""} whitespace-nowrap text-lg font-medium`}
           >
             <Link href={link.route}>{link.label}</Link>
           </li>

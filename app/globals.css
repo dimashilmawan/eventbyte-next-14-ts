@@ -84,8 +84,20 @@ body {
 
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
+  /*
+       'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+
+        sm: "704px",
+        md: "896px",
+        lg: "1152px",
+        xl: "1408px",
+    */
   .wrapper {
-    @apply w-full max-w-7xl p-5 md:px-10 lg:mx-auto xl:px-0;
+    @apply mx-auto w-full  px-[1rem] sm:max-w-[44rem] sm:px-[1.25rem] md:max-w-[56rem] md:px-[1.75rem] lg:max-w-[72rem] lg:px-[2.25rem] xl:max-w-[88rem] xl:px-[2.75rem];
   }
 
   .flex-center {

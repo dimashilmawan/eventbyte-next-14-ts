@@ -7,9 +7,9 @@ import { MobileNav } from "./mobile-nav";
 
 export const Header = () => {
   return (
-    <header className="w-full border-b">
-      <div className="wrapper flex-between ">
-        <Link className="w-36" href="/">
+    <header className="w-full border-b ">
+      <div className="flex-between wrapper py-4">
+        <Link className="w-32" href="/">
           <Image
             src="/assets/images/logo.svg"
             alt="Logo Image"
@@ -17,18 +17,13 @@ export const Header = () => {
             height={38}
           />
         </Link>
-        {/* <SignedIn>
-          <nav>
-            <NavItems />
-          </nav>
-        </SignedIn> */}
-        <nav className="hidden w-fit  md:flex">
+        <nav className="hidden w-fit md:flex">
           <NavItems />
         </nav>
         <div className="flex-center gap-3 ">
           <SignedIn>
             <UserButton
-              appearance={{ elements: { avatarBox: "w-10 h-10" } }}
+              appearance={{ elements: { avatarBox: "w-9 h-9" } }}
               afterSignOutUrl="/"
             />
             <MobileNav />
