@@ -3,18 +3,21 @@
 import { revalidatePath } from "next/cache";
 
 import { connectToDB } from "@/lib/database";
-import User from "@/lib/database/models/user.model";
+import User, { IUser } from "@/lib/database/models/user.model";
 import Order from "@/lib/database/models/order.model";
 import Event from "@/lib/database/models/event.model";
 import { handleError } from "@/lib/utils";
 
 import { CreateUserParams, UpdateUserParams } from "@/types";
+import { HydratedDocument } from "mongoose";
 
 export async function createUser(user: CreateUserParams) {
   try {
     await connectToDB();
 
-    const newUser = await User.create(user);
+    const newUser: HydratedDocument<IUser> = await User.create(user);
+
+    // const newUser = await User.create(user);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);

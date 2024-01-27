@@ -11,9 +11,11 @@ export const Header = () => {
     <header className="w-full border-b ">
       <div className="flex-between wrapper py-4 ">
         <Logo />
-        <nav className="hidden w-fit md:flex">
-          <NavItems />
-        </nav>
+        <SignedIn>
+          <nav className="hidden w-fit md:flex">
+            <NavItems />
+          </nav>
+        </SignedIn>
         <div className="flex-center gap-3 ">
           <SignedIn>
             <UserButton
