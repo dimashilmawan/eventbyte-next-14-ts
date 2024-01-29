@@ -48,8 +48,10 @@ export const EventSchema = new Schema({
   price: { type: String },
   url: { type: String },
 
-  organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  // organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  // category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  organizer: { type: Schema.Types.ObjectId, ref: "User" },
+  category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
 
 export type IEvent = InferSchemaType<typeof EventSchema>;

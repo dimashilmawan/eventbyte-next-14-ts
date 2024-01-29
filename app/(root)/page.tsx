@@ -7,7 +7,7 @@ export default async function Page() {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain ">
-        <div className="wrapper grid grid-cols-1 items-center gap-8 py-8 md:grid-cols-2 md:gap-4">
+        <div className="wrapper grid grid-cols-1 items-center gap-8 py-6 md:grid-cols-2 md:gap-4 md:py-10">
           <div className="">
             <h1 className="text-4xl font-bold ">
               Host, Connect, Celebrate: Your Events, Our Platform!
@@ -46,3 +46,30 @@ export default async function Page() {
     </>
   );
 }
+
+// "use client";
+
+// import { Button } from "@/components/ui/button";
+// import { createUser } from "@/lib/actions/user.action";
+
+// export default function Page() {
+//   async function handleClick() {
+//     const user = await createUser({
+//       clerkId: "awdawd",
+//       email: "hilmawan22@gmail.com",
+//       firstName: "dimas",
+//       lastName: "hilmawan",
+//       photo: "awd",
+//       username: "hilmawan28",
+//     });
+
+//     console.log(user);
+//   }
+//   return (
+//     <div className="flex-center h-screen w-full">
+//       <Button variant={"default"} size={"lg"} onClick={handleClick}>
+//         Save
+//       </Button>
+//     </div>
+//   );
+// }

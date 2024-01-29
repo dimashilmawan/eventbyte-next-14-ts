@@ -28,8 +28,6 @@ export const connectToDB = async () => {
     // };
     const opts = {
       bufferCommands: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       dbName: "eventbyte",
     };
     cached.promise = mongoose
