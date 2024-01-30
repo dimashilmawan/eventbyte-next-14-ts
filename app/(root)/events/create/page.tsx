@@ -7,13 +7,13 @@ export default function Page() {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-        <div className="wrapper py-6 md:py-10">
+        <div className="wrapper py-4 md:py-6">
           <h3 className="text-center text-2xl font-bold md:text-left">
             Create Event
           </h3>
         </div>
       </section>
-      <div className="wrapper py-3 md:py-6">
+      <div className="wrapper pb-6 pt-4 md:pb-10 md:pt-6">
         <EventForm type="create" userId={userId} />
       </div>
     </>
