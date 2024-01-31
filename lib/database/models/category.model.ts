@@ -8,7 +8,9 @@ const CategorySchema = new Schema({
   name: { type: String, required: true, unique: true },
 });
 
-export type ICategory = InferSchemaType<typeof CategorySchema>;
+export type ICategory = InferSchemaType<typeof CategorySchema> & {
+  _id: string;
+};
 
 const Category = models.Category || model("Category", CategorySchema);
 

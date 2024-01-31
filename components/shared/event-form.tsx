@@ -1,12 +1,12 @@
 "use client";
 
+// import id from "date-fns/locale/id";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,7 +33,6 @@ import { useState } from "react";
 type EventFormProps = { userId: string; type: "create" | "update" };
 
 export const EventForm = ({ type, userId }: EventFormProps) => {
-  const [startDate, setStartDate] = useState(new Date());
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: eventDefaultValues,
@@ -64,10 +63,12 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           />
           <FormField
             control={form.control}
-            name="categoryId"
+            name="category"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <Dropdown value={field.value} onChange={field.onChange} />
+              <FormItem className="h-10 w-full">
+                <FormControl>
+                  <Dropdown ref={field.ref} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -132,7 +133,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           )}
         />
 
-        <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
+        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
           <FormField
             control={form.control}
             name="startDateTime"
@@ -148,7 +149,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                       selected={field.value}
                       onChange={(date: Date) => field.onChange(date)}
                       // style input
-                      className="!ml-1.5 h-10 px-1.5 py-2 outline-none"
+                      className="!ml-1.5 h-10 w-full px-1.5 py-2 outline-none"
                       // style wrapper div
                       wrapperClassName="w-full"
                       dateFormat="MMM d, yyyy h:mm aa"
@@ -175,10 +176,10 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                       selected={field.value}
                       onChange={(date: Date) => field.onChange(date)}
                       showTimeSelect
-                      locale="pt-BR"
+                      // locale={id}
                       dateFormat="MMM d, yyyy h:mm aa"
                       // style input
-                      className="!ml-1.5 h-10 px-1.5 py-2 outline-none"
+                      className="!ml-1.5 h-10 w-full px-1.5 py-2 outline-none"
                       // style wrapper div
                       wrapperClassName="w-full"
                     />
@@ -188,7 +189,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
               </FormItem>
             )}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
           <FormField
