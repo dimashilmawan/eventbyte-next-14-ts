@@ -65,7 +65,10 @@ export const Dropdown = () => {
       options={options}
       placeholder="Category"
       classNames={{
-        container: () => cn("!h-10 !flex-center !w-full"),
+        container: () =>
+          cn(
+            "!h-10 !flex-center !w-full !text-sm placeholder:!text-muted-foreground",
+          ),
         control: (state) =>
           cn(
             state.isFocused
