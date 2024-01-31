@@ -65,9 +65,11 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem className="h-10 w-full">
+              <FormItem className=" w-full">
                 <FormControl>
-                  <Dropdown ref={field.ref} />
+                  <div className="h-10">
+                    <Dropdown />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

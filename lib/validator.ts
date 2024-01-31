@@ -25,7 +25,15 @@ export const eventFormSchema = z.object({
       label: z.string(),
       value: z.string(),
     })
-    .nullable(),
+    .nullable()
+    .transform((value, ctx) => {
+      if (value == null)
+        ctx.addIssue({
+          code: "custom",
+          message: "Must have Category",
+        });
+      return value;
+    }),
   price: z.string(),
   isFree: z.boolean(),
   url: z.string().url(),

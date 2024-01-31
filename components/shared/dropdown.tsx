@@ -19,7 +19,7 @@ const createOption = ({ _id, name }: ICategory): Option => ({
   value: _id,
 });
 
-export const Dropdown = forwardRef<any>((props, ref) => {
+export const Dropdown = () => {
   const { field } = useController({ name: "category" });
   const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +28,7 @@ export const Dropdown = forwardRef<any>((props, ref) => {
     const fetchAllCategories = async () => {
       const categories = (await getAllCategories()) as ICategory[];
 
-      if (!categories || categories.length === 0) return;
+      if (!categories || categories.length === 0) return setIsLoading(false);
 
       const formattedCategories = categories.map((category) =>
         createOption(category),
@@ -57,15 +57,15 @@ export const Dropdown = forwardRef<any>((props, ref) => {
   return (
     <CreatableSelect
       {...field}
-      ref={ref}
       isDisabled={isLoading}
       isLoading={isLoading}
       instanceId={field.name}
       onCreateOption={handleCreate}
       options={options}
       placeholder="Category"
+      classNames={{
+        container: () => "focus-visible:-ring-2 focus-visible:-ring-offset-2",
+      }}
     />
   );
-});
-
-Dropdown.displayName = "Dropdown";
+};
