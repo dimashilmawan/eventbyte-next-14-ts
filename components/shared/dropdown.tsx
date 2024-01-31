@@ -5,6 +5,7 @@ import {
   getAllCategories,
 } from "@/lib/actions/category.action";
 import { ICategory } from "@/lib/database/models/category.model";
+import { cn } from "@/lib/utils";
 import { forwardRef, useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
@@ -64,7 +65,22 @@ export const Dropdown = () => {
       options={options}
       placeholder="Category"
       classNames={{
-        container: () => "focus-visible:-ring-2 focus-visible:-ring-offset-2",
+        container: () => cn("!h-10 !flex-center !w-full"),
+        control: (state) =>
+          cn(
+            state.isFocused
+              ? "!border-input !ring-2 !ring-ring !ring-offset-2"
+              : "!border !border-input ",
+            "!rounded-md !w-full",
+          ),
+        option: (state) =>
+          cn(
+            state.isFocused && "!bg-primary-500/50 !text-white",
+            state.isSelected && "!bg-primary-500 !text-white",
+            "!rounded-md ",
+          ),
+        menu: () => "!rounded-md",
+        menuList: (state) => "!space-y-0.5 !px-1",
       }}
     />
   );
