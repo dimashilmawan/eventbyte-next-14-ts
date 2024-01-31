@@ -30,6 +30,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 
+const error = console.error;
+console.error = (...args: any) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};
+
 type EventFormProps = { userId: string; type: "create" | "update" };
 
 export const EventForm = ({ type, userId }: EventFormProps) => {
@@ -135,7 +141,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           )}
         />
 
-        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
+        <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
           <FormField
             control={form.control}
             name="startDateTime"
@@ -191,7 +197,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
               </FormItem>
             )}
           />
-        </div> */}
+        </div>
 
         <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row">
           <FormField
