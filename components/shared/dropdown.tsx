@@ -63,19 +63,20 @@ export const Dropdown = () => {
       instanceId={field.name}
       onCreateOption={handleCreate}
       options={options}
+      // unstyled
       placeholder="Category"
+      classNamePrefix="react-select"
       classNames={{
-        container: () =>
-          cn(
-            "!h-10 !flex-center !w-full !text-sm placeholder:!text-muted-foreground",
-          ),
+        container: () => "!h-10 !flex-center !w-full !text-sm ",
         control: (state) =>
           cn(
             state.isFocused
               ? "!border-input !ring-2 !ring-ring !ring-offset-2"
               : "!border !border-input ",
-            "!rounded-md !w-full",
+            "!rounded-md !w-full ",
           ),
+        placeholder: (state) => "!text-muted-foreground ",
+        valueContainer: (state) => "!text-yellow-400 !px-2.5",
         option: (state) =>
           cn(
             state.isFocused && "!bg-primary-500/50 !text-white",

@@ -82,6 +82,47 @@ body {
     hue-rotate(32deg) brightness(98%) contrast(92%);
 }
 
+/* ========================================== CLERK STYLES */
+.cl-logoImage {
+  height: 38px;
+  /* height: 64px; */
+}
+
+.cl-userButtonBox {
+  flex-direction: row-reverse;
+}
+
+.cl-userButtonOuterIdentifier {
+  font-size: 16px;
+}
+
+.cl-userButtonPopoverCard {
+  right: 4px !important;
+}
+
+.cl-formButtonPrimary:hover,
+.cl-formButtonPrimary:focus,
+.cl-formButtonPrimary:active {
+  background-color: #705cf7;
+}
+
+/* ========================================== REACT-DATEPICKER STYLES */
+.datePicker {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  @apply ml-1.5 h-10 w-full px-1.5 py-2 text-sm outline-none !important;
+}
+
+.react-datepicker__day--selected {
+  @apply rounded-sm bg-emerald-400 text-white !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  @apply bg-emerald-400 !important;
+}
+
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
   /*
@@ -96,9 +137,6 @@ body {
         lg: "1152px",
         xl: "1408px",
     */
-  .wrapper {
-    @apply mx-auto w-full  px-[1rem] sm:max-w-[44rem] sm:px-[1.25rem] md:max-w-[56rem] md:px-[1.75rem] lg:max-w-[72rem] lg:px-[2.25rem] xl:max-w-[88rem] xl:px-[2.75rem];
-  }
 
   .flex-center {
     @apply flex items-center justify-center;
@@ -240,50 +278,4 @@ body {
   .toggle-switch {
     @apply bg-gray-300 !important;
   }
-}
-
-/* ========================================== CLERK STYLES */
-.cl-logoImage {
-  height: 38px;
-  /* height: 64px; */
-}
-
-.cl-userButtonBox {
-  flex-direction: row-reverse;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-}
-
-.cl-userButtonPopoverCard {
-  right: 4px !important;
-}
-
-.cl-formButtonPrimary:hover,
-.cl-formButtonPrimary:focus,
-.cl-formButtonPrimary:active {
-  background-color: #705cf7;
-}
-
-/* ========================================== REACT-DATEPICKER STYLES */
-.datePicker {
-  width: 100%;
-}
-
-/* .react-datepicker__input-container input {
-  background-color: transparent;
-  width: 100%;
-  outline: none;
-  margin-left: 16px;
-} */
-
-.react-datepicker__day--selected {
-  background-color: green !important;
-  color: #ffffff !important;
-  border-radius: 4px;
-}
-
-.react-datepicker__time-list-item--selected {
-  background-color: green !important;
 }

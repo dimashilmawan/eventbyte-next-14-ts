@@ -152,14 +152,14 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
               <div className="flex-center rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
                 <FormLabel className="flex-center gap-1.5 text-muted-foreground">
                   <CalendarDaysIcon className="h-5 w-5" />
-                  <p className="whitespace-nowrap font-normal">Start date:</p>
+                  <p className="w-[4.75rem] whitespace-nowrap font-normal">
+                    Start date:
+                  </p>
                 </FormLabel>
                 <FormControl>
                   <DatePicker
                     selected={field.value}
                     onChange={(date: Date) => field.onChange(date)}
-                    // style input
-                    className="!ml-1.5 h-10 w-full px-1.5 py-2 text-sm outline-none"
                     // style wrapper div
                     wrapperClassName="w-full"
                     dateFormat="MMM d, yyyy h:mm aa"
@@ -180,7 +180,9 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
               <div className="flex-center rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
                 <FormLabel className="flex-center gap-1.5 text-muted-foreground">
                   <CalendarDaysIcon className="h-5 w-5" />
-                  <p className="whitespace-nowrap font-normal">End date:</p>
+                  <p className="w-[4.75rem] whitespace-nowrap font-normal">
+                    End date:
+                  </p>
                 </FormLabel>
                 <FormControl>
                   <DatePicker
@@ -189,8 +191,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                     showTimeSelect
                     // locale={id}
                     dateFormat="MMM d, yyyy h:mm aa"
-                    // style input
-                    className="!ml-1.5 h-10 w-full px-1.5 py-2 text-sm outline-none"
                     // style wrapper div
                     wrapperClassName="w-full"
                   />

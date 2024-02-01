@@ -5,14 +5,15 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { MobileNav } from "./mobile-nav";
 import { Logo } from "./logo";
+import { Container } from "./container";
 
 export const Header = () => {
   return (
-    <header className="w-full border-b ">
-      <div className="flex-between wrapper py-4 ">
+    <header className="w-full border-b">
+      <Container className="flex-between wrapper relative h-[4.250rem] ">
         <Logo />
         <SignedIn>
-          <nav className="hidden w-fit md:flex">
+          <nav className="absolute left-1/2 top-1/2 hidden w-fit -translate-x-1/2 -translate-y-1/2 md:flex">
             <NavItems />
           </nav>
         </SignedIn>
@@ -30,7 +31,7 @@ export const Header = () => {
             </Button>
           </SignedOut>
         </div>
-      </div>
+      </Container>
     </header>
   );
 };

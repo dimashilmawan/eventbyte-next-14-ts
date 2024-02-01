@@ -1,3 +1,4 @@
+import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { connectToDB } from "@/lib/database";
 import Image from "next/image";
@@ -7,7 +8,7 @@ export default async function Page() {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain ">
-        <div className="wrapper grid grid-cols-1 items-center gap-8 py-6 md:grid-cols-2 md:gap-4 md:py-10">
+        <Container className=" grid grid-cols-1 items-center gap-8 py-6 md:grid-cols-2 md:gap-4 md:py-10">
           <div className="">
             <h1 className="text-4xl font-bold ">
               Host, Connect, Celebrate: Your Events, Our Platform!
@@ -33,15 +34,15 @@ export default async function Page() {
               className=" object-contain object-center"
             />
           </div>
-        </div>
+        </Container>
       </section>
       <section id="events">
-        <div className="wrapper py-8">
+        <Container className=" py-8">
           <h2 className="text-xl font-bold">
             Trust by <br /> Thousands of Events
           </h2>
           <div></div>
-        </div>
+        </Container>
       </section>
     </>
   );
