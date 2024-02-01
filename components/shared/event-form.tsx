@@ -29,6 +29,8 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
+import { FileUploader } from "./file-uploader";
+// import { UploadDropzone } from "@/lib/uploadthing";
 
 const error = console.error;
 console.error = (...args: any) => {
@@ -39,6 +41,8 @@ console.error = (...args: any) => {
 type EventFormProps = { userId: string; type: "create" | "update" };
 
 export const EventForm = ({ type, userId }: EventFormProps) => {
+  const [files, setFiles] = useState<File[]>([]);
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: eventDefaultValues,
@@ -108,10 +112,10 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea
-                  {...field}
-                  className="h-72"
-                  placeholder="Description"
+                <FileUploader
+                  onChange={field.onChange}
+                  imageUrl={field.value}
+                  setFiles={setFiles}
                 />
               </FormControl>
               <FormMessage />
