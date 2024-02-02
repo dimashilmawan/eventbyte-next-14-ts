@@ -5,84 +5,99 @@ import { useDropzone } from "@uploadthing/react";
 import {
   Dispatch,
   SetStateAction,
+  forwardRef,
   useCallback,
   useEffect,
   useState,
 } from "react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { MonitorUpIcon } from "lucide-react";
+
+const fileTypes = ["image/svg+xml", "image/png", "image/jpeg", "image/webp"];
 
 type FileUploaderProps = {
   onChange: (url: string) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
+  onImageError: (message: string) => void;
+  onClearImageError: () => void;
 };
 
-export const FileUploader = ({
-  imageUrl,
-  onChange,
-  setFiles,
-}: FileUploaderProps) => {
-  const [isLoading, setisLoading] = useState(true);
+export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
+  ({ imageUrl, onChange, setFiles, onImageError, onClearImageError }, ref) => {
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setisLoading(false);
-  }, []);
+    // const { permittedFileInfo } = useUploadThing("imageUploader");
 
-  const onDrop = useCallback(
-    (acceptedFile: File[]) => {
-      if (acceptedFile.length === 0) return;
-      onChange(URL.createObjectURL(acceptedFile[0]));
+    useEffect(() => {
+      setIsLoading(false);
+    }, []);
 
-      setFiles(acceptedFile);
-    },
-    [onChange, setFiles],
-  );
+    const onDrop = useCallback(
+      (acceptedFiles: File[]) => {
+        if (acceptedFiles.length === 0) {
+          onImageError(
+            "Please upload a single image file with a maximum size of 4MB.",
+          );
+          onChange("");
+          setFiles([]);
+        }
+        onChange(URL.createObjectURL(acceptedFiles[0]));
+        onClearImageError();
+        setFiles(acceptedFiles);
+      },
+      [onChange, setFiles, onImageError, onClearImageError],
+    );
 
-  const { permittedFileInfo } = useUploadThing("imageUploader");
+    // const fileTypes = permittedFileInfo?.config
+    //   ? Object.keys(permittedFileInfo?.config)
+    //   : [];
 
-  const fileTypes = permittedFileInfo?.config
-    ? Object.keys(permittedFileInfo?.config)
-    : [];
+    const { getRootProps, getInputProps } = useDropzone({
+      // accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+      onDrop,
+      accept: generateClientDropzoneAccept(fileTypes),
+      maxFiles: 1,
+      multiple: false,
+      maxSize: 4000000, //4mb
+      disabled: isLoading,
+    });
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
-    maxFiles: 1,
-    multiple: false,
-    maxSize: 4000000, //4mb
-  });
-
-  return (
-    <div
-      {...getRootProps()}
-      className="flex-center h-72 overflow-hidden rounded-md border border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-    >
-      {isLoading ? (
-        <p>Loading</p>
-      ) : (
-        <>
-          <input {...getInputProps()} />
-          {!imageUrl && (
-            <div className="flex-center aspect-video w-36 rounded-md ">
-              Drop files here!
-            </div>
-          )}
-          <div>
-            <div className="flex h-full w-full flex-1 justify-center ">
-              {imageUrl.length > 0 && (
-                <img
-                  src={imageUrl}
-                  alt="image"
-                  width={250}
-                  height={250}
-                  className="w-full object-cover object-center"
-                />
-              )}
-            </div>
+    return (
+      <div
+        {...getRootProps()}
+        ref={ref}
+        className={cn(
+          "flex-center h-72 cursor-pointer overflow-hidden rounded-md border border-input transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          isLoading && "cursor-wait bg-gray-200",
+        )}
+      >
+        <input {...getInputProps()} />
+        {imageUrl ? (
+          <div className="h-full w-full">
+            <Image
+              src={imageUrl}
+              alt="uploaded image"
+              width={250}
+              height={250}
+              className="h-full w-full object-cover object-center"
+            />
           </div>
-        </>
-      )}
-    </div>
-  );
-};
+        ) : (
+          <div className="flex-center flex-col text-muted-foreground">
+            <MonitorUpIcon className="h-20 w-20 " />
+            <h3 className="mt-2">Drag an Image here</h3>
+            <p className="mt-2 text-sm font-medium">JPG, PNG, SVG, WEBP</p>
+            <span className="my-2 ">or</span>
+            <Button type="button">Select from computer</Button>
+          </div>
+        )}
+      </div>
+    );
+  },
+);
+
+FileUploader.displayName = "FileUploader";

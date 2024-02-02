@@ -17,7 +17,7 @@ export const eventFormSchema = z.object({
   title: z.string().min(3),
   description: z.string().min(3).max(400),
   location: z.string().min(3).max(400),
-  imageUrl: z.string().min(3),
+  imageUrl: z.string().url({ message: "Image is Required" }),
   startDateTime: z.date(),
   endDateTime: z.date(),
   category: z

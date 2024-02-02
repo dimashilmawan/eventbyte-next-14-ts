@@ -28,8 +28,9 @@ import { Checkbox } from "../ui/checkbox";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FileUploader } from "./file-uploader";
+import { useUploadThing } from "@/lib/uploadthing";
 // import { UploadDropzone } from "@/lib/uploadthing";
 
 const error = console.error;
@@ -43,6 +44,8 @@ type EventFormProps = { userId: string; type: "create" | "update" };
 export const EventForm = ({ type, userId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
 
+  const { startUpload } = useUploadThing("imageUploader");
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: eventDefaultValues,
@@ -52,6 +55,25 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
     console.log("submit");
     console.log(values);
   }
+
+  const handleImageError = useCallback(
+    (message: string) => {
+      form.setError(
+        "imageUrl",
+        {
+          message,
+          type: "custom",
+        },
+        { shouldFocus: true },
+      );
+    },
+    [form],
+  );
+
+  const handleClearImageError = useCallback(() => {
+    form.clearErrors("imageUrl");
+  }, [form]);
+
   return (
     <Form {...form}>
       <form
@@ -113,9 +135,12 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             <FormItem className="w-full">
               <FormControl>
                 <FileUploader
+                  ref={field.ref}
                   onChange={field.onChange}
                   imageUrl={field.value}
                   setFiles={setFiles}
+                  onImageError={handleImageError}
+                  onClearImageError={handleClearImageError}
                 />
               </FormControl>
               <FormMessage />
