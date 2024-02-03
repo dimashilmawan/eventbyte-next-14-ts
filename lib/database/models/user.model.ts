@@ -9,7 +9,9 @@ export const UserSchema = new Schema({
   photo: { required: true, type: String },
 });
 
-export type IUser = InferSchemaType<typeof UserSchema>;
+export type IUser = InferSchemaType<typeof UserSchema> & {
+  _id: string;
+};
 
 // const User = models.User || model<IUser, Model<IUser>>("User", UserSchema);
 // const User = model<IUser, Model<IUser>>("User", UserSchema);

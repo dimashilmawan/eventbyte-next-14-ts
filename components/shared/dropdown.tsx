@@ -44,7 +44,7 @@ export const Dropdown = () => {
   const handleCreate = async (inputValue: string) => {
     setIsLoading(true);
     const newCategory = (await createCategory({
-      categoryName: inputValue,
+      categoryName: inputValue.trim(),
     })) as ICategory;
     if (!newCategory) return;
 

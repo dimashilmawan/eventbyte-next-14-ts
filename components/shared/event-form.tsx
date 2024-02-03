@@ -31,6 +31,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useCallback, useState } from "react";
 import { FileUploader } from "./file-uploader";
 import { useUploadThing } from "@/lib/uploadthing";
+import { FormItemContainer } from "./form-item-container";
+import { setHours, setMinutes } from "@/lib/utils";
 // import { UploadDropzone } from "@/lib/uploadthing";
 
 const error = console.error;
@@ -51,11 +53,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
     defaultValues: eventDefaultValues,
   });
 
-  function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    console.log("submit");
-    console.log(values);
-  }
-
   const handleImageError = useCallback(
     (message: string) => {
       form.setError(
@@ -74,10 +71,31 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
     form.clearErrors("imageUrl");
   }, [form]);
 
+  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    let uploadedImageUrl = values.imageUrl;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+      if (!uploadedImages) {
+        form.resetField("imageUrl");
+        setFiles([]);
+        handleImageError("Failed to upload image");
+        return;
+      }
+
+      uploadedImageUrl = uploadedImages[0].url;
+    }
+    console.log(uploadedImageUrl);
+  }
+
+  function onerror(errors) {
+    console.log(errors);
+  }
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onerror)}
         className="space-y-6 md:space-y-6 "
       >
         {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row"> */}
@@ -154,7 +172,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <div className="flex-center w-full rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+              <FormItemContainer>
                 <FormLabel>
                   <MapPinIcon className="h-5 w-5 text-muted-foreground" />
                 </FormLabel>
@@ -165,7 +183,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                     className="!mt-0 border-0 px-1.5 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </FormControl>
-              </div>
+              </FormItemContainer>
 
               <FormMessage />
             </FormItem>
@@ -178,7 +196,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           name="startDateTime"
           render={({ field }) => (
             <FormItem className="w-full">
-              <div className="flex-center rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+              <FormItemContainer>
                 <FormLabel className="flex-center gap-1.5 text-muted-foreground">
                   <CalendarDaysIcon className="h-5 w-5" />
                   <p className="w-[4.75rem] whitespace-nowrap font-normal">
@@ -189,13 +207,17 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                   <DatePicker
                     selected={field.value}
                     onChange={(date: Date) => field.onChange(date)}
+                    selectsStart
+                    startDate={field.value}
+                    endDate={form.getValues("endDateTime")}
+                    showTimeSelect
+                    minDate={field.value}
                     // style wrapper div
                     wrapperClassName="w-full"
                     dateFormat="MMM d, yyyy h:mm aa"
-                    showTimeSelect
                   />
                 </FormControl>
-              </div>
+              </FormItemContainer>
               <FormMessage />
             </FormItem>
           )}
@@ -206,7 +228,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           name="endDateTime"
           render={({ field }) => (
             <FormItem className="w-full">
-              <div className="flex-center rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+              <FormItemContainer>
                 <FormLabel className="flex-center gap-1.5 text-muted-foreground">
                   <CalendarDaysIcon className="h-5 w-5" />
                   <p className="w-[4.75rem] whitespace-nowrap font-normal">
@@ -217,14 +239,18 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                   <DatePicker
                     selected={field.value}
                     onChange={(date: Date) => field.onChange(date)}
+                    startDate={form.getValues("startDateTime")}
+                    endDate={field.value}
+                    selectsEnd
                     showTimeSelect
+                    minDate={form.getValues("startDateTime")}
                     // locale={id}
                     dateFormat="MMM d, yyyy h:mm aa"
                     // style wrapper div
                     wrapperClassName="w-full"
                   />
                 </FormControl>
-              </div>
+              </FormItemContainer>
               <FormMessage />
             </FormItem>
           )}
@@ -237,7 +263,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           name="url"
           render={({ field }) => (
             <FormItem className="w-full">
-              <div className="flex-center w-full rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+              <FormItemContainer>
                 <FormLabel>
                   <LinkIcon className="h-5 w-5 text-muted-foreground" />
                 </FormLabel>
@@ -248,7 +274,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                     className="!mt-0 border-0 px-1.5 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </FormControl>
-              </div>
+              </FormItemContainer>
               <FormMessage />
             </FormItem>
           )}
@@ -259,7 +285,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           name="price"
           render={({ field }) => (
             <FormItem className="w-full">
-              <div className="flex-center w-full rounded-md border border-input px-3 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+              <FormItemContainer>
                 <FormLabel>
                   <DollarSignIcon className="h-5 w-5 text-muted-foreground" />
                 </FormLabel>
@@ -281,13 +307,14 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={+form.getValues("price") > 0}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
+              </FormItemContainer>
               <FormMessage />
             </FormItem>
           )}

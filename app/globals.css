@@ -64,6 +64,20 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    /* -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important; */
+    /* -webkit-text-fill-color: rgb(75 85 99 / var(--tw-text-opacity)); */
+    @apply bg-emerald-600 !important;
+  }
 }
 
 * {

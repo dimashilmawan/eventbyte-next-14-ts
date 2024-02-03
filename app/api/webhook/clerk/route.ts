@@ -1,9 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { IUser } from "@/lib/database/models/user.model";
 import { clerkClient } from "@clerk/nextjs";
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.action";
+import { IUser } from "@/lib/database/models/user.model";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -68,15 +68,18 @@ export async function POST(req: Request) {
       photo: image_url,
     };
 
-    const newUser = await createUser(user);
+    try {
+      const newUser = (await createUser(user)) as IUser;
+      if (!newUser) throw new Error("Failed to create user database");
 
-    if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {
         publicMetadata: { userId: newUser._id },
       });
-    }
 
-    return Response.json({ message: "Ok", user: newUser });
+      return new Response("Ok", { status: 201 });
+    } catch (error) {
+      return new Response("Something went wrong!", { status: 500 });
+    }
   }
   if (eventType === "user.updated") {
     const { id, email_addresses, username, first_name, last_name, image_url } =
@@ -90,16 +93,24 @@ export async function POST(req: Request) {
       photo: image_url,
     };
 
-    const updatedUser = await updateUser(id, user);
+    try {
+      await updateUser(id, user);
 
-    return Response.json({ message: "Ok", user: updatedUser });
+      return new Response("Ok", { status: 200 });
+    } catch (error) {
+      return new Response("Something went wrong", { status: 500 });
+    }
   }
   if (eventType === "user.deleted") {
     const { id } = evt.data;
 
-    const deletedUser = await deleteUser(id!);
+    try {
+      await deleteUser(id!);
 
-    return Response.json({ message: "Ok", user: deletedUser });
+      return new Response("Ok", { status: 204 });
+    } catch (error) {
+      return new Response("Something went wrong", { status: 500 });
+    }
   }
 
   return new Response("", { status: 200 });

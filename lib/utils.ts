@@ -9,6 +9,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const setHours = (inputDate: Date, hour: number) => {
+  const resultDate = new Date(inputDate);
+  resultDate.setHours(hour);
+  return resultDate;
+};
+
+export const setMinutes = (inputDate: Date, minute: number) => {
+  const resultDate = new Date(inputDate);
+  resultDate.setMinutes(minute);
+  return resultDate;
+};
+
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: "short", // abbreviated weekday name (e.g., 'Mon')
