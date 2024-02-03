@@ -15,8 +15,8 @@ import { z } from "zod";
 
 export const eventFormSchema = z
   .object({
-    title: z.string().min(3),
-    description: z.string().min(3).max(400),
+    title: z.string().trim().min(3),
+    description: z.string().trim().min(3).max(400),
     location: z.string().min(3).max(400),
     imageUrl: z.string().url({ message: "Image is Required" }),
     startDateTime: z.date(),
@@ -38,12 +38,36 @@ export const eventFormSchema = z
     //     });
     //   return value;
     // }),
-    // price: z.string(),
-    price: z.number().positive().min(1),
+    price: z.string(),
+    // price: z.string().refine(
+    //   (value) => {
+    //     const numericValue = Number(value);
+    //     return !isNaN(numericValue) && numericValue > 0;
+    //   },
+    //   {
+    //     message: "Price must be a valid number greater than zero",
+    //   },
+    // ),
     isFree: z.boolean(),
     url: z.string().url({ message: "Please provide a valid URL." }),
   })
-  .refine((data) => data.endDateTime.getTime() > data.startDateTime.getTime(), {
-    message: "End date must be after the start date.",
-    path: ["endDateTime"],
+  .superRefine((data, ctx) => {
+    if (data.startDateTime.getTime() > data.endDateTime.getTime()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "End date must be after the start date.",
+        path: ["endDateTime"],
+      });
+    }
+    if (data.price === "" && !data.isFree) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please provide a price or set to Free ticket",
+        path: ["price"],
+      });
+    }
   });
+// .refine((data) => data.endDateTime.getTime() > data.startDateTime.getTime(), {
+//   message: "End date must be after the start date.",
+//   path: ["endDateTime"],
+// });

@@ -283,6 +283,19 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
         <FormField
           control={form.control}
           name="price"
+          // render={({ field }) => {
+          //   console.log(field.value);
+          //   return (
+          //     <Input
+          //       type="number"
+          //       value={field.value}
+          //       onChange={(e) => {
+          //         console.log(e.target.value);
+          //         field.onChange(e.target.value);
+          //       }}
+          //     />
+          //   );
+          // }}
           render={({ field }) => (
             <FormItem className="w-full">
               <FormItemContainer>
@@ -294,6 +307,8 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                     {...field}
                     placeholder="Price"
                     type="number"
+                    min={1}
+                    disabled={form.getValues("isFree")}
                     className="!mt-0 border-0 px-1.5 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </FormControl>
@@ -302,14 +317,22 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                   control={form.control}
                   name="isFree"
                   render={({ field }) => (
-                    <FormItem className="flex-center !mt-0 ">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={+form.getValues("price") > 0}
-                        />
-                      </FormControl>
+                    <FormItem className="flex-center">
+                      <div className="flex-center gap-2">
+                        <FormLabel className="whitespace-nowrap text-xs text-muted-foreground">
+                          Free Ticket
+                        </FormLabel>
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={(e) => {
+                              if (e) form.setValue("price", "");
+                              field.onChange(e);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -325,7 +348,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           size={"lg"}
           disabled={form.formState.isSubmitting}
           type="submit"
-          className="w-full "
+          className="h-[40rem] w-full"
         >
           {form.formState.isSubmitting
             ? "Submitting..."
