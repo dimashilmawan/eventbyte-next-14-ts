@@ -8,39 +8,42 @@ import Order from "@/lib/database/models/order.model";
 import Event from "@/lib/database/models/event.model";
 import { handleError } from "@/lib/utils";
 
-import { HydratedDocument } from "mongoose";
-
 type CreateUserParams = Omit<IUser, "_id">;
 
 type UpdateUserParams = Omit<IUser, "_id" | "clerkId" | "email">;
 
-export async function createUser(user: CreateUserParams) {
+export async function createUser(user: CreateUserParams): Promise<IUser> {
   try {
     await connectToDB();
 
-    // const newUser: HydratedDocument<IUser> = await User.create(user);
     const newUser = await User.create(user);
 
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);
+    throw error;
   }
 }
 
-export async function getUserById(userId: string) {
+export async function getUserById(userId: string): Promise<IUser> {
   try {
     await connectToDB();
 
     const user = await User.findById(userId);
 
     if (!user) throw new Error("User not found");
+
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     handleError(error);
+    throw error;
   }
 }
 
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function updateUser(
+  clerkId: string,
+  user: UpdateUserParams,
+): Promise<IUser> {
   try {
     await connectToDB();
 
@@ -49,9 +52,11 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
     });
 
     if (!updatedUser) throw new Error("User update failed");
+
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     handleError(error);
+    throw error;
   }
 }
 
@@ -83,10 +88,15 @@ export async function deleteUser(clerkId: string) {
 
     // Delete user
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+
+    if (!deletedUser) {
+      throw new Error("Failed to delete user");
+    }
     revalidatePath("/");
 
-    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
+    return JSON.parse(JSON.stringify(deletedUser));
   } catch (error) {
     handleError(error);
+    throw error;
   }
 }

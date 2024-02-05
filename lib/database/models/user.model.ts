@@ -15,6 +15,7 @@ export type IUser = InferSchemaType<typeof UserSchema> & {
 
 // const User = models.User || model<IUser, Model<IUser>>("User", UserSchema);
 // const User = model<IUser, Model<IUser>>("User", UserSchema);
+// const User: Model<IUser> = models.User || model("User", UserSchema);
 const User = models.User || model("User", UserSchema);
 
 export default User;

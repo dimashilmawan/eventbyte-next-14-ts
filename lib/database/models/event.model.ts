@@ -1,4 +1,11 @@
-import { model, models, Schema, Document, InferSchemaType } from "mongoose";
+import {
+  model,
+  models,
+  Schema,
+  Document,
+  InferSchemaType,
+  Model,
+} from "mongoose";
 
 // export interface IEvent extends Document {
 //   _id: string;
@@ -48,14 +55,18 @@ export const EventSchema = new Schema({
   price: { type: Number },
   url: { type: String },
 
-  // organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  // category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-  organizer: { type: Schema.Types.ObjectId, ref: "User" },
-  category: { type: Schema.Types.ObjectId, ref: "Category" },
+  organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  // organizer: { type: Schema.Types.ObjectId, ref: "User" },
+  // category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
 
-export type IEvent = InferSchemaType<typeof EventSchema>;
+export type IEvent = Omit<
+  InferSchemaType<typeof EventSchema>,
+  "organizer" | "category" | "createdAt"
+> & { _id: string; organizer: string; category: string; createdAt?: Date };
 
+// const Event: Model<IEvent> = models.Event || model("Event", EventSchema);
 const Event = models.Event || model("Event", EventSchema);
 
 export default Event;

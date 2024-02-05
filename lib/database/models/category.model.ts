@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 import { Schema, model, models, InferSchemaType, Document } from "mongoose";
 
 // export interface ICategory extends Document {
@@ -12,6 +13,7 @@ export type ICategory = InferSchemaType<typeof CategorySchema> & {
   _id: string;
 };
 
+// const Category: Model<ICategory> =
+//   models.Category || model("Category", CategorySchema);
 const Category = models.Category || model("Category", CategorySchema);
-
 export default Category;

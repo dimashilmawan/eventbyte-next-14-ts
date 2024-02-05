@@ -20,39 +20,53 @@ const createOption = ({ _id, name }: ICategory): Option => ({
   value: _id,
 });
 
-export const Dropdown = () => {
+type DropdownProps = {
+  onDropdownError: (message: string) => void;
+};
+
+export const Dropdown = ({ onDropdownError }: DropdownProps) => {
   const { field } = useController({ name: "category" });
   const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllCategories = async () => {
-      const categories = (await getAllCategories()) as ICategory[];
+      try {
+        const categories = await getAllCategories();
 
-      if (!categories || categories.length === 0) return setIsLoading(false);
+        const formattedCategories = categories.map((category) =>
+          createOption(category),
+        );
 
-      const formattedCategories = categories.map((category) =>
-        createOption(category),
-      );
-
-      setOptions(formattedCategories);
-      setIsLoading(false);
+        setOptions(formattedCategories);
+        setIsLoading(false);
+      } catch (error) {
+        onDropdownError("failed to fetch all Categories");
+        setIsLoading(false);
+      }
     };
     fetchAllCategories();
-  }, []);
+  }, [onDropdownError]);
 
   const handleCreate = async (inputValue: string) => {
-    setIsLoading(true);
-    const newCategory = (await createCategory({
-      categoryName: inputValue.trim(),
-    })) as ICategory;
-    if (!newCategory) return;
+    try {
+      setIsLoading(true);
 
-    const newOption = createOption(newCategory);
+      const newCategory = await createCategory({
+        categoryName: inputValue.trim(),
+      });
 
-    setIsLoading(false);
-    setOptions((prev) => [...prev, newOption]);
-    field.onChange(newOption);
+      const newOption = createOption(newCategory);
+
+      setIsLoading(false);
+
+      setOptions((prev) => [...prev, newOption]);
+      field.onChange(newOption);
+    } catch (error) {
+      // Handle the error, display an error message, or log it;
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   return (

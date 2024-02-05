@@ -75,6 +75,20 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
     form.clearErrors("imageUrl");
   }, [form]);
 
+  const handleDropdownError = useCallback(
+    (message: string) => {
+      form.setError(
+        "category",
+        {
+          message,
+          type: "custom",
+        },
+        { shouldFocus: true },
+      );
+    },
+    [form],
+  );
+
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     let uploadedImageUrl = values.imageUrl;
 
@@ -95,19 +109,23 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
     }
 
     if (type === "create") {
-      const newEvent = await createEvent({
-        event: {
-          ...values,
-          organizer: userId,
-          category: values.category?.value!,
-          price: +values.price,
-          imageUrl: uploadedImageUrl,
-        },
-        path: "/",
-      });
-      if (newEvent) {
-        form.reset();
-        router.push(`/events/${newEvent._id}`);
+      try {
+        const newEvent = await createEvent({
+          event: {
+            ...values,
+            organizer: userId,
+            category: values.category?.value!,
+            price: +values.price,
+            imageUrl: uploadedImageUrl,
+          },
+          path: "/profile",
+        });
+        if (newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
@@ -142,7 +160,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             <FormItem className=" w-full">
               <FormControl>
                 <div className="h-10">
-                  <Dropdown />
+                  <Dropdown onDropdownError={handleDropdownError} />
                 </div>
               </FormControl>
               <FormMessage />
