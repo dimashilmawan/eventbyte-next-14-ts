@@ -8,8 +8,11 @@ import Order from "@/lib/database/models/order.model";
 import Event from "@/lib/database/models/event.model";
 import { handleError } from "@/lib/utils";
 
-import { CreateUserParams, UpdateUserParams } from "@/types";
 import { HydratedDocument } from "mongoose";
+
+type CreateUserParams = Omit<IUser, "_id">;
+
+type UpdateUserParams = Omit<IUser, "_id" | "clerkId" | "email">;
 
 export async function createUser(user: CreateUserParams) {
   try {

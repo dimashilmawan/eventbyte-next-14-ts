@@ -33,6 +33,8 @@ import { FileUploader } from "./file-uploader";
 import { useUploadThing } from "@/lib/uploadthing";
 import { FormItemContainer } from "./form-item-container";
 import { setHours, setMinutes } from "@/lib/utils";
+import { createEvent } from "@/lib/actions/event.action";
+import { useRouter } from "next/navigation";
 // import { UploadDropzone } from "@/lib/uploadthing";
 
 const error = console.error;
@@ -45,6 +47,8 @@ type EventFormProps = { userId: string; type: "create" | "update" };
 
 export const EventForm = ({ type, userId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
+
+  const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
 
@@ -76,29 +80,48 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
 
     if (files.length > 0) {
       const uploadedImages = await startUpload(files);
+
+      // If the image upload has failed
       if (!uploadedImages) {
         form.resetField("imageUrl");
         setFiles([]);
         handleImageError("Failed to upload image");
+
+        // terminate onSubmit fn
         return;
       }
 
       uploadedImageUrl = uploadedImages[0].url;
     }
-    console.log(uploadedImageUrl);
+
+    if (type === "create") {
+      const newEvent = await createEvent({
+        event: {
+          ...values,
+          organizer: userId,
+          category: values.category?.value!,
+          price: +values.price,
+          imageUrl: uploadedImageUrl,
+        },
+        path: "/",
+      });
+      if (newEvent) {
+        form.reset();
+        router.push(`/events/${newEvent._id}`);
+      }
+    }
   }
 
-  function onerror(errors) {
+  function onError(errors) {
     console.log(errors);
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, onerror)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
         className="space-y-6 md:space-y-6 "
       >
-        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row"> */}
         <FormField
           control={form.control}
           name="title"
@@ -126,9 +149,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             </FormItem>
           )}
         />
-        {/* </div> */}
 
-        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row"> */}
         <FormField
           control={form.control}
           name="description"
@@ -165,7 +186,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             </FormItem>
           )}
         />
-        {/* </div> */}
 
         <FormField
           control={form.control}
@@ -190,7 +210,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           )}
         />
 
-        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row"> */}
         <FormField
           control={form.control}
           name="startDateTime"
@@ -255,9 +274,7 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             </FormItem>
           )}
         />
-        {/* </div> */}
 
-        {/* <div className="flex flex-col gap-x-4 gap-y-6 md:flex-row"> */}
         <FormField
           control={form.control}
           name="url"
@@ -283,19 +300,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
         <FormField
           control={form.control}
           name="price"
-          // render={({ field }) => {
-          //   console.log(field.value);
-          //   return (
-          //     <Input
-          //       type="number"
-          //       value={field.value}
-          //       onChange={(e) => {
-          //         console.log(e.target.value);
-          //         field.onChange(e.target.value);
-          //       }}
-          //     />
-          //   );
-          // }}
           render={({ field }) => (
             <FormItem className="w-full">
               <FormItemContainer>
@@ -342,7 +346,6 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             </FormItem>
           )}
         />
-        {/* </div> */}
 
         <Button
           size={"lg"}
