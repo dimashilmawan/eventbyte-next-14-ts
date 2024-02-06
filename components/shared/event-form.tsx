@@ -32,7 +32,7 @@ import { useCallback, useState } from "react";
 import { FileUploader } from "./file-uploader";
 import { useUploadThing } from "@/lib/uploadthing";
 import { FormItemContainer } from "./form-item-container";
-import { setHours, setMinutes } from "@/lib/utils";
+import { addDaysToDate, setHours, setMinutes } from "@/lib/utils";
 import { createEvent } from "@/lib/actions/event.action";
 import { useRouter } from "next/navigation";
 // import { UploadDropzone } from "@/lib/uploadthing";
@@ -218,9 +218,41 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                   <Input
                     {...field}
                     placeholder="Location"
+                    disabled={form.getValues("isOnline")}
                     className="!mt-0 border-0 px-1.5 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </FormControl>
+
+                <FormField
+                  control={form.control}
+                  name="isOnline"
+                  render={({ field }) => (
+                    <FormItem className="flex-center">
+                      <div className="flex-center gap-2">
+                        <FormLabel className="whitespace-nowrap text-xs text-muted-foreground">
+                          Online
+                        </FormLabel>
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={(e) => {
+                              // e is boolean
+                              if (e) {
+                                form.setValue("location", "Online");
+                                form.clearErrors("location");
+                              } else {
+                                form.setValue("location", "");
+                              }
+                              field.onChange(e);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </FormItemContainer>
 
               <FormMessage />
@@ -243,12 +275,12 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                 <FormControl>
                   <DatePicker
                     selected={field.value}
-                    onChange={(date: Date) => field.onChange(date)}
-                    selectsStart
-                    startDate={field.value}
-                    endDate={form.getValues("endDateTime")}
+                    onChange={(date: Date) => {
+                      form.setValue("endDateTime", date);
+                      field.onChange(date);
+                    }}
                     showTimeSelect
-                    minDate={field.value}
+                    minDate={new Date()}
                     // style wrapper div
                     wrapperClassName="w-full"
                     dateFormat="MMM d, yyyy h:mm aa"
@@ -275,14 +307,13 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                 <FormControl>
                   <DatePicker
                     selected={field.value}
-                    onChange={(date: Date) => field.onChange(date)}
-                    startDate={form.getValues("startDateTime")}
-                    endDate={field.value}
-                    selectsEnd
+                    onChange={field.onChange}
+                    showTimeSelectOnly
                     showTimeSelect
-                    minDate={form.getValues("startDateTime")}
-                    // locale={id}
+                    minTime={form.getValues("startDateTime")}
+                    maxTime={setHours(form.getValues("startDateTime"), 23)}
                     dateFormat="MMM d, yyyy h:mm aa"
+                    // locale={id}
                     // style wrapper div
                     wrapperClassName="w-full"
                   />
@@ -348,7 +379,13 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={(e) => {
-                              if (e) form.setValue("price", "");
+                              // e is boolean
+                              if (e) {
+                                form.setValue("price", "0");
+                                form.clearErrors("price");
+                              } else {
+                                form.setValue("price", "");
+                              }
                               field.onChange(e);
                             }}
                           />
@@ -369,11 +406,9 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
           size={"lg"}
           disabled={form.formState.isSubmitting}
           type="submit"
-          className="h-[40rem] w-full"
+          className="w-full capitalize"
         >
-          {form.formState.isSubmitting
-            ? "Submitting..."
-            : `${type[0].toUpperCase() + type.substring(1)} Event`}
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Event`}
         </Button>
       </form>
     </Form>

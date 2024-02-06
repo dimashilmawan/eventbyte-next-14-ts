@@ -15,5 +15,8 @@ export type ICategory = InferSchemaType<typeof CategorySchema> & {
 
 // const Category: Model<ICategory> =
 //   models.Category || model("Category", CategorySchema);
-const Category = models.Category || model("Category", CategorySchema);
+// const Category = models.Category || model("Category", CategorySchema);
+
+const Category: Model<InferSchemaType<typeof CategorySchema>> =
+  models.Category || model("Category", CategorySchema);
 export default Category;

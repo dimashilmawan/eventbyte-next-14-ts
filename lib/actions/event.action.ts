@@ -7,6 +7,7 @@ import { handleError } from "../utils";
 import { connectToDB } from "../database";
 import User, { IUser } from "../database/models/user.model";
 import Category, { ICategory } from "../database/models/category.model";
+import { notFound } from "next/navigation";
 
 type PopulatedEvent = Omit<IEvent, "category" | "organizer"> & {
   category: ICategory;
@@ -55,14 +56,11 @@ export const getEventById = async (
     await connectToDB();
 
     const event = await populateEvent(Event.findById(eventId));
-    console.log("error event");
-    console.log(event);
     // const event = await Event.findById(eventId);
-    if (!event) throw new Error("Cannot find the event");
+    if (!event) return notFound();
 
     return JSON.parse(JSON.stringify(event));
   } catch (error) {
-    console.log("error inside error");
     handleError(error);
     throw error;
   }

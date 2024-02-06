@@ -48,11 +48,12 @@ export const EventSchema = new Schema({
   imageUrl: { type: String, required: true },
   description: { type: String },
   location: { type: String },
+  isOnline: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   startDateTime: { type: Date, default: Date.now },
   endDateTime: { type: Date, default: Date.now },
-  isFree: { type: Boolean, default: false },
   price: { type: Number },
+  isFree: { type: Boolean, default: false },
   url: { type: String },
 
   organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -67,6 +68,9 @@ export type IEvent = Omit<
 > & { _id: string; organizer: string; category: string; createdAt?: Date };
 
 // const Event: Model<IEvent> = models.Event || model("Event", EventSchema);
-const Event = models.Event || model("Event", EventSchema);
+// const Event = models.Event || model("Event", EventSchema);
+
+const Event: Model<InferSchemaType<typeof EventSchema>> =
+  models.Event || model("Event", EventSchema);
 
 export default Event;

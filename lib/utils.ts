@@ -9,6 +9,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const addDaysToDate = (inputDate: Date, numberOfDays: number) => {
+  const date = new Date(inputDate);
+
+  // Add the specified number of days
+  date.setDate(date.getDate() + numberOfDays);
+  return date;
+};
+
 export const setHours = (inputDate: Date, hour: number) => {
   const resultDate = new Date(inputDate);
   resultDate.setHours(hour);
@@ -111,7 +119,7 @@ export function removeKeysFromQuery({
   );
 }
 
-export const handleError = (error: unknown) => {
+export const handleError = async (error: unknown) => {
   console.error(error);
   throw new Error(typeof error === "string" ? error : JSON.stringify(error));
 };

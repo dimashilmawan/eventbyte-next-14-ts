@@ -21,6 +21,7 @@ export const eventDefaultValues = {
   title: "",
   description: "",
   location: "",
+  isOnline: false,
   imageUrl: "",
   startDateTime: new Date(),
   endDateTime: new Date(),

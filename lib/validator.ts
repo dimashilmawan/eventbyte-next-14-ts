@@ -18,6 +18,7 @@ export const eventFormSchema = z
     title: z.string().trim().min(3),
     description: z.string().trim().min(3).max(400),
     location: z.string().min(3).max(400),
+    isOnline: z.boolean(),
     imageUrl: z.string().url({ message: "Image is Required" }),
     startDateTime: z.date(),
     endDateTime: z.date(),
@@ -55,7 +56,7 @@ export const eventFormSchema = z
     if (data.startDateTime.getTime() > data.endDateTime.getTime()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "End date must be after the start date.",
+        message: "End date must be greater than the start date.",
         path: ["endDateTime"],
       });
     }
