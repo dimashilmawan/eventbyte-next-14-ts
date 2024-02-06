@@ -50,6 +50,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
         setFiles(acceptedFiles);
       },
       [onChange, setFiles, onImageError, onClearImageError],
+      // [],
     );
 
     // const fileTypes = permittedFileInfo?.config
@@ -62,7 +63,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps>(
       accept: generateClientDropzoneAccept(fileTypes),
       maxFiles: 1,
       multiple: false,
-      // maxSize: 4000000, //4mb
+      maxSize: 4000000, //4mb
       disabled: isLoading,
     });
 

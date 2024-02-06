@@ -52,10 +52,10 @@ export default async function Page({
 
           <div className="flex flex-col gap-3 md:flex-row md:items-center">
             <div className="space-x-2">
-              <span className="inline-block rounded-full bg-green-500/10 px-3 py-1.5 font-semibold text-green-600">
+              <span className="inline-block rounded-full bg-green-500/10 px-4 py-1.5 font-semibold text-green-600">
                 {event.isFree ? "Free" : `$${event.price}`}
               </span>
-              <span className="inline-block rounded-full bg-gray-500/10 px-3 py-1.5 font-semibold text-gray-600">
+              <span className="inline-block rounded-full bg-gray-500/10 px-4 py-1.5 font-semibold text-gray-600">
                 {event?.category?.name}
               </span>
             </div>
@@ -73,7 +73,7 @@ export default async function Page({
           </Button>
 
           <div className="space-y-3 ">
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               <div>
                 <CalendarIcon className="h-5 w-5 text-orange-500" />
               </div>
@@ -82,7 +82,7 @@ export default async function Page({
                 {format(event.endDateTime, "h:mm a")}
               </p>
             </div>
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               <div>
                 <MapPinIcon className="h-5 w-5 text-orange-500" />
               </div>
@@ -91,7 +91,9 @@ export default async function Page({
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-xl font-semibold">What you&apos;ll learn</h3>
+            <h3 className="text-xl font-semibold text-gray-600">
+              What you&apos;ll learn
+            </h3>
             <p>{event.description}</p>
 
             <p className="truncate text-primary-500 underline">{event.url}</p>

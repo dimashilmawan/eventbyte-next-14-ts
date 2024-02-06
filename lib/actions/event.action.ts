@@ -19,6 +19,13 @@ type CreateEventParams = {
   path: string;
 };
 
+type GetAllEventsParams = {
+  query: string;
+  category: string;
+  page: number;
+  limit: number;
+};
+
 const populateEvent = (query: any) => {
   return query
     .populate({ path: "category", select: ["_id", "name"], model: Category })
@@ -60,6 +67,55 @@ export const getEventById = async (
     if (!event) return notFound();
 
     return JSON.parse(JSON.stringify(event));
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+const getCategoryByName = async (name: string) => {
+  return Category.findOne({ name: { $regex: name, $options: "i" } });
+};
+
+export const getAllEvents = async ({
+  query,
+  category,
+  page,
+  limit = 6,
+}: GetAllEventsParams): Promise<{
+  data: PopulatedEvent;
+  totalPages: number;
+}> => {
+  try {
+    await connectToDB();
+    let fetchedCategory;
+    if (category) {
+      fetchedCategory = await getCategoryByName(category);
+    }
+
+    const titleCondition = query
+      ? { title: { $regex: query, $options: "i" } }
+      : {};
+    const categoryCondition = category
+      ? { category: { $regex: fetchedCategory?._id, $options: "i" } }
+      : {};
+    const condition = {
+      $and: [titleCondition, categoryCondition],
+    };
+    const skipAmout = (Number(page) - 1) * limit;
+
+    const eventsQuery = Event.find(condition)
+      .sort({ createdAt: "desc" })
+      .skip(skipAmout)
+      .limit(limit);
+
+    const events = await populateEvent(eventsQuery);
+    const eventsCount = await Event.countDocuments();
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / 6),
+    };
   } catch (error) {
     handleError(error);
     throw error;

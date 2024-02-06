@@ -113,8 +113,8 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
         const newEvent = await createEvent({
           event: {
             ...values,
-            organizer: userId,
-            category: values.category?.value!,
+            organizer: userId, //User Id
+            category: values.category?.value!, //Category Id
             price: +values.price,
             imageUrl: uploadedImageUrl,
           },

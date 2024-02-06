@@ -1,10 +1,28 @@
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import { getAllEvents } from "@/lib/actions/event.action";
 import { connectToDB } from "@/lib/database";
 import Image from "next/image";
 import Link from "next/link";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: {
+    query?: string;
+    page?: string;
+    category?: string;
+  };
+}) {
+  // console.log(searchParams);
+  const page = Number(searchParams.page) || 1;
+  const query = searchParams.query || "";
+  const category = searchParams.category || "";
+
+  const events = await getAllEvents({ page, limit: 6, query, category });
+  const obj = {};
+
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain ">
