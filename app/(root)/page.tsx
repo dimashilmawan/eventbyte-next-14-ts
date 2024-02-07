@@ -1,3 +1,4 @@
+import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { getAllEvents } from "@/lib/actions/event.action";
@@ -20,8 +21,12 @@ export default async function Page({
   const query = searchParams.query || "";
   const category = searchParams.category || "";
 
-  const events = await getAllEvents({ page, limit: 6, query, category });
-  const obj = {};
+  const { data, totalPages } = await getAllEvents({
+    page,
+    limit: 6,
+    query,
+    category,
+  });
 
   return (
     <>
@@ -55,11 +60,24 @@ export default async function Page({
         </Container>
       </section>
       <section id="events">
-        <Container className=" py-8">
-          <h2 className="text-xl font-bold">
+        <Container className=" space-y-8 py-8">
+          <h2 className="text-3xl font-bold">
             Trust by <br /> Thousands of Events
           </h2>
-          <div></div>
+          <div className="">
+            <div>Search</div>
+            <div>Category</div>
+          </div>
+
+          <Collection
+            data={data}
+            emptyTitle="No Events found"
+            emptySubtitle="Come back later!"
+            page={page}
+            totalPages={totalPages}
+            limit={6}
+            collectionType="all-events"
+          />
         </Container>
       </section>
     </>

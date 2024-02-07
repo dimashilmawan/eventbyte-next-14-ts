@@ -1,59 +1,22 @@
 "use client";
-import { FileUploader } from "@/components/shared/file-uploader";
-import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { createEvent, getEventById } from "@/lib/actions/event.action";
 
-enum GenderEnum {
-  female = "female",
-  male = "male",
-  other = "other",
-}
+import { DUMMY_EVENT_DATA } from "@/constants";
+import { notFound } from "next/navigation";
 
-interface IFormInput {
-  firstName: string;
-  gender: GenderEnum;
-}
-
-export default function Page() {
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<IFormInput>({
-    defaultValues: { firstName: "", gender: GenderEnum.female },
-  });
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
-  const handleTitleError = () => {
-    setError("firstName", { message: "title error" });
+function Page() {
+  const handleInjectToDB = async () => {
+    const injectEventsPromise = DUMMY_EVENT_DATA.map((event) => {
+      return createEvent({ event, path: "/test" });
+    });
+    await Promise.all(injectEventsPromise);
+    console.log("Success");
   };
-
-  console.log(errors.firstName);
   return (
     <div className="flex-center h-screen w-full">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>First Name</label>
-        <input
-          {...register("firstName", {
-            required: { message: "required bro", value: true },
-          })}
-        />
-        <label>Gender Selection</label>
-        <select {...register("gender")}>
-          <option value="female">female</option>
-          <option value="male">male</option>
-          <option value="other">other</option>
-        </select>
-        <input type="submit" />
-        <button
-          className="rounded-md bg-primary-500 px-3 py-1.5 text-white"
-          type="button"
-          onClick={handleTitleError}
-        >
-          click
-        </button>
-      </form>
-      {errors.firstName && <p>{errors.firstName.message}</p>}
+      <Button onClick={handleInjectToDB}>Inject</Button>
     </div>
   );
 }
+export default Page;

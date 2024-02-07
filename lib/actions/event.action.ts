@@ -9,7 +9,7 @@ import User, { IUser } from "../database/models/user.model";
 import Category, { ICategory } from "../database/models/category.model";
 import { notFound } from "next/navigation";
 
-type PopulatedEvent = Omit<IEvent, "category" | "organizer"> & {
+export type PopulatedEvent = Omit<IEvent, "category" | "organizer"> & {
   category: ICategory;
   organizer: Pick<IUser, "_id" | "firstName" | "lastName">;
 };
@@ -61,12 +61,28 @@ export const getEventById = async (
 ): Promise<PopulatedEvent> => {
   try {
     await connectToDB();
-
     const event = await populateEvent(Event.findById(eventId));
-    // const event = await Event.findById(eventId);
-    if (!event) return notFound();
 
     return JSON.parse(JSON.stringify(event));
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const deleteEvent = async ({
+  eventId,
+  path,
+}: {
+  eventId: string;
+  path: string;
+}) => {
+  try {
+    await connectToDB();
+
+    await Event.findByIdAndDelete(eventId);
+
+    revalidatePath(path);
   } catch (error) {
     handleError(error);
     throw error;
@@ -83,7 +99,7 @@ export const getAllEvents = async ({
   page,
   limit = 6,
 }: GetAllEventsParams): Promise<{
-  data: PopulatedEvent;
+  data: PopulatedEvent[];
   totalPages: number;
 }> => {
   try {
