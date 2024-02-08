@@ -5,6 +5,7 @@ import {
   Document,
   InferSchemaType,
   Model,
+  Types,
 } from "mongoose";
 
 // export interface IEvent extends Document {
@@ -43,6 +44,23 @@ import {
 
 // export default Event;
 
+export type IEvent = {
+  _id: string;
+  title: string;
+  imageUrl: string;
+  description?: string;
+  location?: string;
+  isOnline: boolean;
+  createdAt?: Date;
+  startDateTime: Date;
+  endDateTime: Date;
+  price?: number;
+  isFree: boolean;
+  url?: string;
+  organizer: string;
+  category: string;
+};
+
 export const EventSchema = new Schema({
   title: { type: String, required: true },
   imageUrl: { type: String, required: true },
@@ -61,11 +79,6 @@ export const EventSchema = new Schema({
   // organizer: { type: Schema.Types.ObjectId, ref: "User" },
   // category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
-
-export type IEvent = Omit<
-  InferSchemaType<typeof EventSchema>,
-  "organizer" | "category" | "createdAt"
-> & { _id: string; organizer: string; category: string; createdAt?: Date };
 
 // const Event: Model<IEvent> = models.Event || model("Event", EventSchema);
 // const Event = models.Event || model("Event", EventSchema);

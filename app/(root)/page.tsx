@@ -30,7 +30,7 @@ export default async function Page({
 
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-contain ">
+      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
         <Container className=" grid grid-cols-1 items-center gap-8 py-6 md:grid-cols-2 md:gap-4 md:py-10">
           <div className="">
             <h1 className="text-4xl font-bold ">

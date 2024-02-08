@@ -33,8 +33,13 @@ import { FileUploader } from "./file-uploader";
 import { useUploadThing } from "@/lib/uploadthing";
 import { FormItemContainer } from "./form-item-container";
 import { addDaysToDate, setHours, setMinutes } from "@/lib/utils";
-import { createEvent } from "@/lib/actions/event.action";
+import {
+  PopulatedEvent,
+  createEvent,
+  updateEvent,
+} from "@/lib/actions/event.action";
 import { useRouter } from "next/navigation";
+import { IEvent } from "@/lib/database/models/event.model";
 // import { UploadDropzone } from "@/lib/uploadthing";
 
 const error = console.error;
@@ -43,18 +48,33 @@ console.error = (...args: any) => {
   error(...args);
 };
 
-type EventFormProps = { userId: string; type: "create" | "update" };
+type EventFormProps = {
+  userId: string;
+  type: "create" | "update";
+  event?: PopulatedEvent;
+};
 
-export const EventForm = ({ type, userId }: EventFormProps) => {
+export const EventForm = ({ type, userId, event }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
 
   const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
 
+  const initialValues =
+    type === "update" && event
+      ? {
+          ...event,
+          category: { label: event.category.name, value: event.category._id },
+          price: event.price + "",
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: eventDefaultValues,
+    defaultValues: initialValues,
   });
 
   const handleImageError = useCallback(
@@ -119,10 +139,33 @@ export const EventForm = ({ type, userId }: EventFormProps) => {
             imageUrl: uploadedImageUrl,
           },
           path: "/profile",
+          // path: `/events/${event?._id}`,
         });
         if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (type === "update") {
+      try {
+        const updatedEvent = await updateEvent({
+          event: {
+            ...values,
+            _id: event?._id!,
+            organizer: userId, //User Id
+            category: values.category?.value!, //Category Id
+            price: +values.price,
+            imageUrl: uploadedImageUrl,
+          },
+          path: `/events/${event?._id}`,
+        });
+        if (updatedEvent) {
+          form.reset();
+          router.push(`/events/${updatedEvent._id}`);
         }
       } catch (error) {
         console.log(error);

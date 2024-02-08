@@ -18,7 +18,6 @@ type CollectionProps = {
 export const Collection = ({
   data,
   page,
-  limit,
   totalPages = 1,
   emptyTitle,
   emptySubtitle,

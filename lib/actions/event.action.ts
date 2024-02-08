@@ -19,11 +19,28 @@ type CreateEventParams = {
   path: string;
 };
 
+type UpdateEventParams = {
+  event: IEvent;
+  path: string;
+};
+
 type GetAllEventsParams = {
   query: string;
   category: string;
   page: number;
   limit: number;
+};
+
+type GetEventsByCategoryParams = {
+  eventId: string;
+  categoryId: string;
+  page?: number;
+  limit?: number;
+};
+type GetEventsByUserParams = {
+  userId: string;
+  page?: number;
+  limit?: number;
 };
 
 const populateEvent = (query: any) => {
@@ -55,12 +72,37 @@ export const createEvent = async ({
     throw error;
   }
 };
+export const updateEvent = async ({
+  event,
+  path,
+}: UpdateEventParams): Promise<IEvent> => {
+  try {
+    await connectToDB();
+
+    const eventToUpdate = await Event.findById(event._id);
+
+    if (!eventToUpdate) throw new Error("Event to be updated not found");
+    if (event.organizer.toString() !== eventToUpdate.organizer.toString())
+      throw new Error("Unauthorized");
+
+    const updatedEvent = await Event.findByIdAndUpdate(event._id, event, {
+      new: true,
+    });
+    revalidatePath(path);
+
+    return JSON.parse(JSON.stringify(updatedEvent));
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
 
 export const getEventById = async (
   eventId: string,
 ): Promise<PopulatedEvent> => {
   try {
     await connectToDB();
+
     const event = await populateEvent(Event.findById(eventId));
 
     return JSON.parse(JSON.stringify(event));
@@ -104,6 +146,7 @@ export const getAllEvents = async ({
 }> => {
   try {
     await connectToDB();
+
     let fetchedCategory;
     if (category) {
       fetchedCategory = await getCategoryByName(category);
@@ -130,7 +173,77 @@ export const getAllEvents = async ({
 
     return {
       data: JSON.parse(JSON.stringify(events)),
-      totalPages: Math.ceil(eventsCount / 6),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getEventsByCategory = async ({
+  eventId,
+  categoryId,
+  page = 1,
+  limit = 3,
+}: GetEventsByCategoryParams): Promise<{
+  data: PopulatedEvent[];
+  totalPages: number;
+}> => {
+  try {
+    await connectToDB();
+
+    const condition = {
+      $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
+    };
+
+    const skipAmout = (Number(page) - 1) * limit;
+
+    const eventsQuery = Event.find(condition)
+      .sort({ createdAt: "desc" })
+      .skip(skipAmout)
+      .limit(limit);
+
+    const events = await populateEvent(eventsQuery);
+    const eventsCount = await Event.countDocuments();
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+export const getEventsByUser = async ({
+  userId,
+  page = 1,
+  limit = 6,
+}: GetEventsByUserParams): Promise<{
+  data: PopulatedEvent[];
+  totalPages: number;
+}> => {
+  try {
+    await connectToDB();
+
+    const condition = {
+      organizer: userId,
+    };
+
+    const skipAmout = (Number(page) - 1) * limit;
+
+    const eventsQuery = Event.find(condition)
+      .sort({ createdAt: "desc" })
+      .skip(skipAmout)
+      .limit(limit);
+
+    const events = await populateEvent(eventsQuery);
+    const eventsCount = await Event.countDocuments();
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
     };
   } catch (error) {
     handleError(error);

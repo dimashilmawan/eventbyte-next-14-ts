@@ -23,7 +23,8 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   const { sessionClaims } = auth();
 
   const userId = sessionClaims?.userId as string;
-  const isEventCreator = event._id.toString() === userId.toString();
+  const isEventCreator = event.organizer._id?.toString() === userId?.toString();
+
   return (
     <li className="relative aspect-[9/10] rounded-md shadow-md">
       {isEventCreator && !hidePrice && (
@@ -36,7 +37,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           <DeleteConfirmation eventId={event._id} />
         </div>
       )}
-      <Link href={`events/${event._id}`} className="flex h-full flex-col">
+      <Link href={`/events/${event._id}`} className="flex h-full flex-col">
         <div className="relative aspect-video">
           <Image
             alt="event card image"
@@ -66,14 +67,15 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
               <p className="text-sm font-medium text-gray-600">
                 {event.organizer.firstName} {event.organizer.lastName}
               </p>
-              {hasOrderLink && (
+              {/* TODO - HYDRATION FAIL, edit Li LINK wrap to h1 */}
+              {/* {hasOrderLink && (
                 <Button asChild>
                   <Link href={`/orders`} className="flex items-center gap-1">
                     <span>Order details</span>
                     <ArrowUpRightFromSquare className="h-4 w-4" />
                   </Link>
                 </Button>
-              )}
+              )} */}
             </div>
           </div>
         </div>
