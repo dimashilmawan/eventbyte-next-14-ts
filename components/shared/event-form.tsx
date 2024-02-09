@@ -173,14 +173,10 @@ export const EventForm = ({ type, userId, event }: EventFormProps) => {
     }
   }
 
-  function onError(errors) {
-    console.log(errors);
-  }
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, onError)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 md:space-y-6 "
       >
         <FormField

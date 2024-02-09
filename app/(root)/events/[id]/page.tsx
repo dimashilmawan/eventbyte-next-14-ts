@@ -1,3 +1,4 @@
+import { CheckoutButton } from "@/components/shared/checkout-button";
 import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
@@ -86,10 +87,7 @@ export default async function Page({
                 </span>
               </p>
             </div>
-
-            <Button className="rounded-full" size={"lg"}>
-              Buy Ticket
-            </Button>
+            <CheckoutButton event={event} />
 
             <div className="space-y-3 ">
               <div className="flex items-center gap-3">

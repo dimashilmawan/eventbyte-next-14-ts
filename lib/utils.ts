@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
+import Stripe from "stripe";
 
 import { UrlQueryParams, RemoveUrlQueryParams } from "@/types";
 
@@ -123,3 +124,8 @@ export const handleError = async (error: unknown) => {
   console.error(error);
   throw new Error(typeof error === "string" ? error : JSON.stringify(error));
 };
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  typescript: true,
+  apiVersion: "2023-10-16",
+});

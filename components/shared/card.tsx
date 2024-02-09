@@ -11,7 +11,7 @@ import { boolean } from "zod";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import { auth } from "@clerk/nextjs";
-import { DeleteConfirmation } from "./deleteConfirmation";
+import { DeleteConfirmation } from "./delete-confirmation";
 
 type CardProps = {
   event: PopulatedEvent;
