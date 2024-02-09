@@ -32,8 +32,8 @@ export async function POST(req: Request) {
   // Handle Event
   if (event.type === "checkout.session.completed") {
     const { id, metadata, amount_total } = event.data.object;
-    const buyerId = metadata ? (metadata?.buyerId as string) : "";
-    const eventId = metadata ? (metadata?.eventId as string) : "";
+    const buyerId = metadata?.buyerId || "";
+    const eventId = metadata?.eventId || "";
     const totalAmount = amount_total ? amount_total / 100 : 0;
 
     try {
