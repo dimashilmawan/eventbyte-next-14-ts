@@ -58,7 +58,7 @@ export const checkoutOrder = async ({
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL!}/events/${eventId}`,
     });
 
-    redirect(session.url!);
+    return session.url;
   } catch (error) {
     handleError(error);
     throw error;
@@ -74,6 +74,7 @@ type CreateOrderParams = {
 
 export const createOrder = async (order: CreateOrderParams) => {
   try {
+    console.log("CREATE ORDER");
     await connectToDB();
     const newOrder = await Order.create({
       stripeId: order.stripeId,
