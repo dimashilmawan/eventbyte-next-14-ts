@@ -25,36 +25,25 @@ export const CheckoutButton = ({ event }: { event: PopulatedEvent }) => {
         eventDesc: event.description!,
         eventPrice: event.price!,
         eventIsFree: event.isFree,
+        eventImageUrl: event.imageUrl,
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleCheckoutFree = async () => {};
-
   return (
     <>
       {!isEventCreator && (
         <>
           <SignedIn>
-            {event.isFree ? (
-              <Button
-                className="rounded-full"
-                size="lg"
-                onClick={handleCheckoutFree}
-              >
-                Get Ticket
-              </Button>
-            ) : (
-              <Button
-                className="rounded-full"
-                size="lg"
-                onClick={handleCheckoutPriced}
-              >
-                Buy Ticket
-              </Button>
-            )}
+            <Button
+              className="rounded-full"
+              size="lg"
+              onClick={handleCheckoutPriced}
+            >
+              {event.isFree ? "Get Ticket" : "Buy Ticket"}
+            </Button>
           </SignedIn>
           <SignedOut>
             <Button asChild className="rounded-full" size="lg">

@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 import { InferSchemaType, Schema, model, models } from "mongoose";
 
 // export interface IOrder extends Document {
@@ -35,7 +36,7 @@ const OrderSchema = new Schema({
     unique: true,
   },
   totalAmount: {
-    type: String,
+    type: Number,
   },
   event: {
     type: Schema.Types.ObjectId,
@@ -49,8 +50,16 @@ const OrderSchema = new Schema({
   },
 });
 
-export type IOrder = InferSchemaType<typeof OrderSchema>;
+export type IOrder = {
+  _id: string;
+  stripeId: string;
+  eventId: string;
+  buyerId: string;
+  totalAmount: number;
+  createdAt: Date;
+};
 
-const Order = models.Order || model("Order", OrderSchema);
+const Order: Model<InferSchemaType<typeof OrderSchema>> =
+  models.Order || model("Order", OrderSchema);
 
 export default Order;

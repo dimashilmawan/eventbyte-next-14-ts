@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 import { handleError } from "../utils";
+import { connectToDB } from "../database";
+import Order from "../database/models/order.model";
 
 type CheckoutOrderParams = {
   eventId: string;
@@ -11,6 +13,7 @@ type CheckoutOrderParams = {
   eventIsFree: boolean;
   eventTitle: string;
   eventDesc: string;
+  eventImageUrl: string;
 };
 
 export const checkoutOrder = async ({
@@ -20,6 +23,7 @@ export const checkoutOrder = async ({
   eventIsFree,
   eventTitle,
   eventDesc,
+  eventImageUrl,
 }: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -34,11 +38,17 @@ export const checkoutOrder = async ({
           price_data: {
             currency: "usd",
             unit_amount: price,
-            product_data: { name: eventTitle, description: eventDesc },
+            product_data: {
+              name: eventTitle,
+              description: eventDesc,
+              images: [eventImageUrl],
+            },
           },
+
           quantity: 1,
         },
       ],
+
       metadata: {
         buyerId,
         eventId,
@@ -49,6 +59,30 @@ export const checkoutOrder = async ({
     });
 
     redirect(session.url!);
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+type CreateOrderParams = {
+  stripeId: string;
+  eventId: string;
+  buyerId: string;
+  totalAmount: number;
+};
+
+export const createOrder = async (order: CreateOrderParams) => {
+  try {
+    await connectToDB();
+    const newOrder = await Order.create({
+      stripeId: order.stripeId,
+      totalAmount: order.totalAmount,
+      event: order.eventId,
+      buyer: order.buyerId,
+    });
+
+    return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
     handleError(error);
     throw error;
