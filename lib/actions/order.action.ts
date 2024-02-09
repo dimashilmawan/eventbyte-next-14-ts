@@ -75,6 +75,7 @@ type CreateOrderParams = {
 export const createOrder = async (order: CreateOrderParams) => {
   try {
     console.log("CREATE ORDER");
+    console.log({ order });
     await connectToDB();
     const newOrder = await Order.create({
       stripeId: order.stripeId,

@@ -17,6 +17,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!,
     );
   } catch (err) {
+    console.log("ERROR NOT ALLOW");
     if (err instanceof Error) {
       return new Response(`Stripe Webhook error: ${err.message}`, {
         status: 400,
