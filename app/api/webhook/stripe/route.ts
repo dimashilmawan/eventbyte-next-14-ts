@@ -1,3 +1,4 @@
+import { createOrder } from "@/lib/actions/order.action";
 import { headers } from "next/headers";
 import Stripe from "stripe";
 
@@ -29,9 +30,23 @@ export async function POST(req: Request) {
 
   // Handle Event
   if (event.type === "checkout.session.completed") {
-    const checkoutSession = event.data.object;
+    const { id, metadata, amount_total } = event.data.object;
+    const buyerId = metadata ? (metadata?.buyerId as string) : "";
+    const eventId = metadata ? (metadata?.eventId as string) : "";
+    const totalAmount = amount_total ? amount_total / 100 : 0;
+
     try {
-    } catch (error) {}
+      await createOrder({
+        stripeId: id,
+        buyerId,
+        eventId,
+        totalAmount,
+      });
+    } catch (error) {
+      return new Response("Something went wrong - STRIPE WEBHOOK", {
+        status: 500,
+      });
+    }
   }
 
   // Return a 200 response to acknowledge receipt of the event
