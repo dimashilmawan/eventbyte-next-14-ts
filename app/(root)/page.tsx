@@ -1,5 +1,6 @@
 import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
+import { Search } from "@/components/shared/search";
 import { Button } from "@/components/ui/button";
 import { getAllEvents } from "@/lib/actions/event.action";
 import Image from "next/image";
@@ -61,10 +62,7 @@ export default async function Page({
           <h2 className="text-3xl font-bold">
             Trust by <br /> Thousands of Events
           </h2>
-          <div className="">
-            <div>Search</div>
-            <div>Category</div>
-          </div>
+          <Search />
 
           <Collection
             data={data}

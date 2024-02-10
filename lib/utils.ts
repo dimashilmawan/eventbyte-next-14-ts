@@ -5,6 +5,7 @@ import qs from "query-string";
 import Stripe from "stripe";
 
 import { UrlQueryParams, RemoveUrlQueryParams } from "@/types";
+import queryString from "query-string";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -87,38 +88,38 @@ export const formatPrice = (price: string) => {
   return formattedPrice;
 };
 
-export function formUrlQuery({ params, key, value }: UrlQueryParams) {
-  const currentUrl = qs.parse(params);
+// export function formUrlQuery({ params, key, value }: UrlQueryParams) {
+//   const currentUrl = qs.parse(params);
 
-  currentUrl[key] = value;
+//   currentUrl[key] = value;
 
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true },
-  );
-}
+//   return qs.stringifyUrl(
+//     {
+//       url: window.location.pathname,
+//       query: currentUrl,
+//     },
+//     { skipNull: true },
+//   );
+// }
 
-export function removeKeysFromQuery({
-  params,
-  keysToRemove,
-}: RemoveUrlQueryParams) {
-  const currentUrl = qs.parse(params);
+// export function removeKeysFromQuery({
+//   params,
+//   keysToRemove,
+// }: RemoveUrlQueryParams) {
+//   const currentUrl = qs.parse(params);
 
-  keysToRemove.forEach((key) => {
-    delete currentUrl[key];
-  });
+//   keysToRemove.forEach((key) => {
+//     delete currentUrl[key];
+//   });
 
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true },
-  );
-}
+//   return qs.stringifyUrl(
+//     {
+//       url: window.location.pathname,
+//       query: currentUrl,
+//     },
+//     { skipNull: true },
+//   );
+// }
 
 export const handleError = async (error: unknown) => {
   console.error(error);
@@ -129,3 +130,50 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
   apiVersion: "2023-10-16",
 });
+
+type RemoveKeysFromQueryParams = {
+  params: string;
+  keysToBeRemoved: string[];
+  pathname: string;
+};
+
+export const removeKeysFromQuery = ({
+  params,
+  keysToBeRemoved,
+  pathname,
+}: RemoveKeysFromQueryParams) => {
+  const currentUrl = queryString.parse(params);
+
+  // loop keysToBeRemoved Array and
+  keysToBeRemoved.forEach((key) => {
+    //delete currentUrl OBJECT field based on key of keysToBeRemoved ARRAY
+    delete currentUrl[key];
+  });
+
+  return queryString.stringifyUrl(
+    { url: pathname, query: currentUrl },
+    { skipNull: true },
+  );
+};
+
+type FormUrlQueryParams = {
+  params: string;
+  value: string;
+  pathname: string;
+  key: string;
+};
+
+export const formUrlQuery = ({
+  params,
+  value,
+  key,
+  pathname,
+}: FormUrlQueryParams) => {
+  const currentUrl = queryString.parse(params);
+  currentUrl[key] = value;
+
+  return queryString.stringifyUrl(
+    { url: pathname, query: currentUrl },
+    { skipNull: true },
+  );
+};
