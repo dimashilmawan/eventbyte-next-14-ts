@@ -32,6 +32,7 @@ export const Collection = ({
             {data.map((event) => {
               const hasOrderLink = collectionType === "events-organized";
               const hidePrice = collectionType === "my-tickets";
+
               return (
                 <Card
                   key={event._id}

@@ -12,11 +12,19 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 );
 
-export const CheckoutButton = ({ event }: { event: PopulatedEvent }) => {
+export const CheckoutButton = ({
+  event,
+  hasOrdered,
+}: {
+  event: PopulatedEvent;
+  hasOrdered: boolean;
+}) => {
+  const router = useRouter();
+
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
+
   const isEventCreator = userId?.toString() === event.organizer._id.toString();
-  const router = useRouter();
 
   const handleCheckoutPriced = async () => {
     try {
@@ -38,24 +46,30 @@ export const CheckoutButton = ({ event }: { event: PopulatedEvent }) => {
 
   return (
     <>
-      {!isEventCreator && (
-        <>
-          <SignedIn>
-            <Button
-              className="rounded-full"
-              size="lg"
-              onClick={handleCheckoutPriced}
-            >
-              {event.isFree ? "Get Ticket" : "Buy Ticket"}
-            </Button>
-          </SignedIn>
-          <SignedOut>
-            <Button asChild className="rounded-full" size="lg">
-              <Link href="/sign-in">Checkout</Link>
-            </Button>
-          </SignedOut>
-        </>
-      )}
+      <SignedIn>
+        {isEventCreator ? (
+          <Button asChild>
+            <Link href="/profile#organized-events">Organized events</Link>
+          </Button>
+        ) : hasOrdered ? (
+          <p className="w-fit bg-primary-500 px-4 py-1 font-semibold text-white">
+            Ticket Already Bought
+          </p>
+        ) : (
+          <Button
+            className="rounded-full"
+            size="lg"
+            onClick={handleCheckoutPriced}
+          >
+            {event.isFree ? "Get Ticket" : "Buy Ticket"}
+          </Button>
+        )}
+      </SignedIn>
+      <SignedOut>
+        <Button asChild className="rounded-full" size="lg">
+          <Link href="/sign-in">Checkout</Link>
+        </Button>
+      </SignedOut>
     </>
   );
 };

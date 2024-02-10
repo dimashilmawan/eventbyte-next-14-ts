@@ -1,10 +1,12 @@
 import { CheckoutButton } from "@/components/shared/checkout-button";
 import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
-import { Button } from "@/components/ui/button";
 import { getEventById, getEventsByCategory } from "@/lib/actions/event.action";
-import { getUserById } from "@/lib/actions/user.action";
+import { hasUserOrderedForEvent } from "@/lib/actions/order.action";
+import { connectToDB } from "@/lib/database";
+import Order from "@/lib/database/models/order.model";
 import { cn } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { CalendarIcon, MapPinIcon, MinusIcon } from "lucide-react";
 import { Types } from "mongoose";
@@ -53,6 +55,18 @@ export default async function Page({
 
   if (!event) return notFound();
 
+  const { sessionClaims } = auth();
+
+  const userId = sessionClaims?.userId as string;
+
+  // if user already order, they cannot buy it twice
+  const hasOrdered = await hasUserOrderedForEvent({
+    eventId: event._id,
+    userId,
+  });
+  // const hasOrdered = false;
+  console.log(hasOrdered);
+
   const relatedEvents = await getEventsByCategory({
     eventId: id,
     categoryId: event.category._id,
@@ -87,7 +101,7 @@ export default async function Page({
                 </span>
               </p>
             </div>
-            <CheckoutButton event={event} />
+            <CheckoutButton event={event} hasOrdered={hasOrdered} />
 
             <div className="space-y-3 ">
               <div className="flex items-center gap-3">

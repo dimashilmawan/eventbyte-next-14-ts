@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import Stripe from "stripe";
 import { handleError } from "../utils";
 import { connectToDB } from "../database";
-import Order from "../database/models/order.model";
+import Order, { IOrder } from "../database/models/order.model";
+import Event, { IEvent } from "../database/models/event.model";
+import User, { IUser } from "../database/models/user.model";
+import Category, { ICategory } from "../database/models/category.model";
 
 type CheckoutOrderParams = {
   eventId: string;
@@ -14,6 +17,26 @@ type CheckoutOrderParams = {
   eventTitle: string;
   eventDesc: string;
   eventImageUrl: string;
+};
+
+type CreateOrderParams = {
+  stripeId: string;
+  eventId: string;
+  buyerId: string;
+  totalAmount: number;
+};
+
+type GetOrdersByUserParams = {
+  userId: string;
+  limit?: number;
+  page: number;
+};
+
+type PopulatedOrder = Omit<IOrder, "event"> & {
+  event: Omit<IEvent, "organizer" | "category"> & {
+    organizer: Pick<IUser, "_id" | "firstName" | "lastName">;
+    category: ICategory;
+  };
 };
 
 export const checkoutOrder = async ({
@@ -65,17 +88,8 @@ export const checkoutOrder = async ({
   }
 };
 
-type CreateOrderParams = {
-  stripeId: string;
-  eventId: string;
-  buyerId: string;
-  totalAmount: number;
-};
-
 export const createOrder = async (order: CreateOrderParams) => {
   try {
-    console.log("CREATE ORDER");
-    console.log({ order });
     await connectToDB();
     const newOrder = await Order.create({
       stripeId: order.stripeId,
@@ -88,5 +102,78 @@ export const createOrder = async (order: CreateOrderParams) => {
   } catch (error) {
     handleError(error);
     throw error;
+  }
+};
+
+export const hasUserOrderedForEvent = async ({
+  eventId,
+  userId,
+}: {
+  eventId: string;
+  userId: string;
+}): Promise<boolean> => {
+  try {
+    await connectToDB();
+    const hasOrdered = await Order.findOne({
+      event: eventId,
+      buyer: userId,
+    });
+
+    return JSON.parse(JSON.stringify(!!hasOrdered));
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const getOrdersByUser = async ({
+  userId,
+  limit = 3,
+  page,
+}: GetOrdersByUserParams): Promise<{
+  data: PopulatedOrder[];
+  totalPages: number;
+}> => {
+  try {
+    await connectToDB();
+
+    const condition = {
+      buyer: userId,
+    };
+
+    const skipAmout = (Number(page) - 1) * limit;
+
+    const orders = await Order.find(condition)
+      .sort({ createdAt: "desc" })
+      .skip(skipAmout)
+      .limit(limit)
+      .populate({
+        path: "event",
+        model: Event,
+        populate: [
+          {
+            path: "organizer",
+            model: User,
+            select: ["_id", "firstName", "lastName"],
+          },
+          {
+            path: "category",
+            model: Category,
+            select: ["_id", "name"],
+          },
+        ],
+      });
+
+    const ordersCount = await Order.countDocuments();
+
+    return JSON.parse(
+      JSON.stringify({
+        data: orders,
+        totalPages: Math.ceil(ordersCount / limit),
+      }),
+    );
+  } catch (error) {
+    handleError(error);
+    throw Error;
   }
 };

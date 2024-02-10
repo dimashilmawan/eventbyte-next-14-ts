@@ -27,7 +27,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
 
   return (
     <li className="relative aspect-[9/10] rounded-md shadow-md">
-      {isEventCreator && !hidePrice && (
+      {isEventCreator && hasOrderLink && !hidePrice && (
         <div className="absolute right-3 top-3 z-50 flex flex-col gap-1.5 rounded-md bg-white p-1.5 text-muted-foreground">
           <Button asChild className="h-6 w-6 p-0" variant="ghost">
             <Link href={`/events/${event._id}/update`} className="">

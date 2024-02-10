@@ -2,10 +2,8 @@ import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { getAllEvents } from "@/lib/actions/event.action";
-import { connectToDB } from "@/lib/database";
 import Image from "next/image";
 import Link from "next/link";
-import { ReadonlyURLSearchParams } from "next/navigation";
 
 export default async function Page({
   searchParams,
@@ -16,7 +14,6 @@ export default async function Page({
     category?: string;
   };
 }) {
-  // console.log(searchParams);
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query || "";
   const category = searchParams.category || "";

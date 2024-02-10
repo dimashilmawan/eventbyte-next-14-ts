@@ -72,6 +72,7 @@ export const createEvent = async ({
     throw error;
   }
 };
+
 export const updateEvent = async ({
   event,
   path,
@@ -219,7 +220,7 @@ export const getEventsByCategory = async ({
 export const getEventsByUser = async ({
   userId,
   page = 1,
-  limit = 6,
+  limit = 3,
 }: GetEventsByUserParams): Promise<{
   data: PopulatedEvent[];
   totalPages: number;
