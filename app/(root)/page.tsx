@@ -1,3 +1,4 @@
+import { CategoryFilter } from "@/components/shared/category-filter";
 import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
 import { Search } from "@/components/shared/search";
@@ -62,7 +63,10 @@ export default async function Page({
           <h2 className="text-3xl font-bold">
             Trust by <br /> Thousands of Events
           </h2>
-          <Search />
+          <div className="flex items-center gap-3">
+            <Search />
+            <CategoryFilter />
+          </div>
 
           <Collection
             data={data}

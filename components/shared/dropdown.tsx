@@ -6,9 +6,30 @@ import {
 } from "@/lib/actions/category.action";
 import { ICategory } from "@/lib/database/models/category.model";
 import { cn } from "@/lib/utils";
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
+
+export const selectComponentStyles = {
+  container: () => "!h-10 !flex-center !w-full ",
+  control: (state: any) =>
+    cn(
+      state.isFocused
+        ? "!border-input !ring-2 !ring-ring !ring-offset-2"
+        : "!border !border-input ",
+      "!rounded-md !w-full !h-full !text-sm",
+    ),
+  placeholder: () => "!text-muted-foreground ",
+  valueContainer: () => "!text-yellow-400 !px-2.5",
+  option: (state: any) =>
+    cn(
+      state.isFocused && "!bg-primary-500/50 !text-white",
+      state.isSelected && "!bg-primary-500 !text-white",
+      "!rounded-md ",
+    ),
+  menu: () => "!rounded-md",
+  menuList: () => "!space-y-0.5 !px-1",
+};
 
 interface Option {
   readonly label: string;
@@ -79,27 +100,8 @@ export const Dropdown = ({ onDropdownError }: DropdownProps) => {
       options={options}
       // unstyled
       placeholder="Category"
-      classNamePrefix="react-select"
-      classNames={{
-        container: () => "!h-10 !flex-center !w-full !text-sm ",
-        control: (state) =>
-          cn(
-            state.isFocused
-              ? "!border-input !ring-2 !ring-ring !ring-offset-2"
-              : "!border !border-input ",
-            "!rounded-md !w-full ",
-          ),
-        placeholder: (state) => "!text-muted-foreground ",
-        valueContainer: (state) => "!text-yellow-400 !px-2.5",
-        option: (state) =>
-          cn(
-            state.isFocused && "!bg-primary-500/50 !text-white",
-            state.isSelected && "!bg-primary-500 !text-white",
-            "!rounded-md ",
-          ),
-        menu: () => "!rounded-md",
-        menuList: (state) => "!space-y-0.5 !px-1",
-      }}
+      // classNamePrefix="react-select"
+      classNames={selectComponentStyles}
     />
   );
 };

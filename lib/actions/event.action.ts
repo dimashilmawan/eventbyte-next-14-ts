@@ -132,7 +132,7 @@ export const deleteEvent = async ({
   }
 };
 
-const getCategoryByName = async (name: string) => {
+const getCategoryByName = async (name: string): Promise<ICategory | null> => {
   return Category.findOne({ name: { $regex: name, $options: "i" } });
 };
 
@@ -157,7 +157,9 @@ export const getAllEvents = async ({
       ? { title: { $regex: query, $options: "i" } }
       : {};
     const categoryCondition = category
-      ? { category: { $regex: fetchedCategory?._id, $options: "i" } }
+      ? {
+          category: fetchedCategory?._id,
+        }
       : {};
     const condition = {
       $and: [titleCondition, categoryCondition],

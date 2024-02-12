@@ -26,7 +26,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   const isEventCreator = event.organizer._id?.toString() === userId?.toString();
 
   return (
-    <li className="relative aspect-[9/10] rounded-md shadow-md">
+    <li className="relative aspect-[9/10] overflow-hidden rounded-md shadow-md">
       {isEventCreator && hasOrderLink && !hidePrice && (
         <div className="absolute right-3 top-3 z-50 flex flex-col gap-1.5 rounded-md bg-white p-1.5 text-muted-foreground">
           <Button asChild className="h-6 w-6 p-0" variant="ghost">
@@ -37,16 +37,19 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           <DeleteConfirmation eventId={event._id} />
         </div>
       )}
-      <Link href={`/events/${event._id}`} className="flex h-full flex-col">
-        <div className="relative aspect-video">
+      <div className="flex h-full flex-col">
+        <Link
+          href={`/events/${event._id}`}
+          className="relative block aspect-video overflow-hidden"
+        >
           <Image
             alt="event card image"
             src={event.imageUrl}
             fill
             sizes="95vw"
-            className="rounded-tl-md rounded-tr-md object-cover object-center"
+            className="rounded-tl-md rounded-tr-md object-cover object-center transition-all hover:scale-110"
           />
-        </div>
+        </Link>
         <div className="flex flex-1 flex-col p-4">
           <div className="space-x-2">
             {!hidePrice && (
@@ -61,25 +64,29 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           <p className="mt-2 font-medium text-gray-500">
             {format(event.startDateTime, "EEE, MMM d, h:mm a")}
           </p>
-          <h1 className="mt-4 text-xl font-bold">{event.title}</h1>
+          <Link href={`/events/${event._id}`}>
+            <h1 className="mt-4 text-xl font-bold decoration-primary-500 decoration-2  hover:text-primary-500 hover:underline">
+              {event.title}
+            </h1>
+          </Link>
           <div className="mt-2 flex flex-1 items-end ">
             <div className="flex w-full items-center justify-between">
               <p className="text-sm font-medium text-gray-600">
                 {event.organizer.firstName} {event.organizer.lastName}
               </p>
               {/* TODO - HYDRATION FAIL, edit Li LINK wrap to h1 */}
-              {/* {hasOrderLink && (
-                <Button asChild>
-                  <Link href={`/orders`} className="flex items-center gap-1">
+              {hasOrderLink && (
+                <Button asChild variant="link">
+                  <Link href={`/orders`} className="flex items-center gap-2">
                     <span>Order details</span>
                     <ArrowUpRightFromSquare className="h-4 w-4" />
                   </Link>
                 </Button>
-              )} */}
+              )}
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </li>
   );
 };

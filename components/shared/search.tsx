@@ -44,7 +44,7 @@ export const Search = ({
   }, [query, searchParams, pathname, router]);
 
   return (
-    <div className="flex-between w-full gap-3 rounded-md border border-input bg-primary-50 px-4 py-2 has-[:autofill]:bg-[rgb(232,240,254)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
+    <div className="flex-between w-full flex-[2] gap-2 rounded-md border border-input px-4 py-2 has-[:autofill]:bg-[rgb(232,240,254)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">
       <label htmlFor="search">
         <SearchIcon className="h-5 w-5" />
       </label>
@@ -55,7 +55,7 @@ export const Search = ({
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="flex-1 bg-primary-50 outline-none"
+        className="h-5 flex-1 text-sm outline-none placeholder:text-muted-foreground"
       />
     </div>
   );
