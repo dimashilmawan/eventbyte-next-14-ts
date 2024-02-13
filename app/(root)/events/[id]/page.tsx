@@ -64,8 +64,6 @@ export default async function Page({
     eventId: event._id,
     userId,
   });
-  // const hasOrdered = false;
-  console.log(hasOrdered);
 
   const relatedEvents = await getEventsByCategory({
     eventId: id,

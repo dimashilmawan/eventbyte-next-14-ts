@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import Stripe from "stripe";
 import { handleError } from "../utils";
 import { connectToDB } from "../database";
@@ -8,6 +7,7 @@ import Order, { IOrder } from "../database/models/order.model";
 import Event, { IEvent } from "../database/models/event.model";
 import User, { IUser } from "../database/models/user.model";
 import Category, { ICategory } from "../database/models/category.model";
+import mongoose from "mongoose";
 
 type CheckoutOrderParams = {
   eventId: string;
@@ -126,6 +126,68 @@ export const hasUserOrderedForEvent = async ({
   }
 };
 
+export const getOrdersByEvent = async ({
+  query,
+  eventId,
+}: {
+  query?: string;
+  eventId: string;
+}) => {
+  // convert string to ObjectId
+  const eventObjectId = mongoose.Types.ObjectId.createFromHexString(eventId);
+
+  try {
+    await connectToDB();
+    const orders = await Order.aggregate([
+      {
+        $lookup: {
+          as: "buyer",
+          localField: "buyer",
+          foreignField: "_id",
+          from: "users",
+        },
+      },
+      {
+        $unwind: "$buyer",
+      },
+      {
+        $lookup: {
+          as: "event",
+          localField: "event",
+          foreignField: "_id",
+          from: "events",
+        },
+      },
+      {
+        $unwind: "$event",
+      },
+      {
+        $project: {
+          _id: 1,
+          totalAmount: 1,
+          createdAt: 1,
+          eventId: "$event._id",
+          eventTitle: "$event.title",
+          buyer: {
+            $concat: ["$buyer.firstName", " ", "$buyer.lastName"],
+          },
+        },
+      },
+      {
+        $match: {
+          $and: [
+            { eventId: eventObjectId },
+            { buyer: { $regex: query, $options: "i" } },
+          ],
+        },
+      },
+    ]);
+    return JSON.parse(JSON.stringify(orders));
+  } catch (error) {
+    handleError(error);
+    throw Error;
+  }
+};
 export const getOrdersByUser = async ({
   userId,
   limit = 3,

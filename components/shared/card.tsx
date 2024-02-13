@@ -77,7 +77,10 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
               {/* TODO - HYDRATION FAIL, edit Li LINK wrap to h1 */}
               {hasOrderLink && (
                 <Button asChild variant="link">
-                  <Link href={`/orders`} className="flex items-center gap-2">
+                  <Link
+                    href={`/orders?eventId=${event._id}`}
+                    className="flex items-center gap-2"
+                  >
                     <span>Order details</span>
                     <ArrowUpRightFromSquare className="h-4 w-4" />
                   </Link>
