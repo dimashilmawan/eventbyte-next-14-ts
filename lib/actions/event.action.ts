@@ -43,6 +43,11 @@ type GetEventsByUserParams = {
   limit?: number;
 };
 
+type VerifyEventCreatedByUserParams = {
+  userId: string;
+  eventId: string;
+};
+
 const populateEvent = (query: any) => {
   return query
     .populate({ path: "category", select: ["_id", "name"], model: Category })
@@ -248,6 +253,38 @@ export const getEventsByUser = async ({
       data: JSON.parse(JSON.stringify(events)),
       totalPages: Math.ceil(eventsCount / limit),
     };
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const verifyEventCreatedByUser = async ({
+  userId,
+  eventId,
+}: VerifyEventCreatedByUserParams): Promise<boolean> => {
+  try {
+    await connectToDB();
+
+    const event = await Event.findById(eventId);
+    if (!event) return false;
+
+    const isVerify = event.organizer.equals(userId);
+    return isVerify;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const isEventExist = async (eventId: string): Promise<boolean> => {
+  try {
+    await connectToDB();
+
+    const event = await Event.findById(eventId);
+    if (!event) return false;
+
+    return true;
   } catch (error) {
     handleError(error);
     throw error;

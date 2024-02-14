@@ -126,13 +126,22 @@ export const hasUserOrderedForEvent = async ({
   }
 };
 
+type OrdersByEvent = {
+  _id: string;
+  totalAmount: number;
+  createdAt: Date;
+  eventId: string;
+  eventTitle: string;
+  buyer: string;
+};
+
 export const getOrdersByEvent = async ({
   query,
   eventId,
 }: {
   query?: string;
   eventId: string;
-}) => {
+}): Promise<OrdersByEvent[]> => {
   // convert string to ObjectId
   const eventObjectId = mongoose.Types.ObjectId.createFromHexString(eventId);
 

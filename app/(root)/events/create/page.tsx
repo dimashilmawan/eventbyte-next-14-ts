@@ -1,6 +1,6 @@
 import { Container } from "@/components/shared/container";
 import { EventForm } from "@/components/shared/event-form";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 
 export default async function Page() {
   const { sessionClaims } = auth();
