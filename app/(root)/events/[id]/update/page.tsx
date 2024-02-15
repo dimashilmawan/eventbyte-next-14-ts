@@ -27,7 +27,7 @@ export default async function Page({
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
         <Container className=" py-4 md:max-w-xl md:py-6">
-          <h3 className="text-center text-2xl font-bold md:text-left">
+          <h3 className="text-center text-2xl font-bold text-[#00244c] md:text-left">
             Update Event
           </h3>
         </Container>

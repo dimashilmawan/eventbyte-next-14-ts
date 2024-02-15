@@ -44,13 +44,13 @@ export default async function Page({
               asChild
               className="mt-9 w-full rounded-full md:w-fit "
             >
-              <Link href="#events">Explore noew</Link>
+              <Link href="#events">Explore now</Link>
             </Button>
           </div>
           <div className="relative h-[100vw] md:h-[33vw]">
             <Image
               alt="hero image"
-              src="/assets/images/hero.png"
+              src="/assets/images/confrence.png"
               fill
               sizes="97vw"
               className=" object-contain object-center"
