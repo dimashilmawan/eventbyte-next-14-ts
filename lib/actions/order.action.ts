@@ -235,7 +235,7 @@ export const getOrdersByUser = async ({
         ],
       });
 
-    const ordersCount = await Order.countDocuments();
+    const ordersCount = await Order.find(condition).countDocuments();
 
     return JSON.parse(
       JSON.stringify({

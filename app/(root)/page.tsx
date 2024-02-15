@@ -22,7 +22,7 @@ export default async function Page({
 
   const { data, totalPages } = await getAllEvents({
     page,
-    limit: 6,
+    limit: 3,
     query,
     category,
   });
@@ -74,7 +74,6 @@ export default async function Page({
             emptySubtitle="Come back later!"
             page={page}
             totalPages={totalPages}
-            limit={6}
             collectionType="all-events"
           />
         </Container>

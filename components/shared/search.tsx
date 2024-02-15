@@ -22,11 +22,15 @@ export const Search = ({
 
       // if query value is not '' | (NOT EMPTY)
       if (query) {
+        console.log("useEffect");
+
         newUrl = formUrlQuery({
           params: searchParams.toString(),
+          pathname,
           key: "query",
           value: query,
-          pathname,
+          key2: "page",
+          value2: "1",
         });
         // if query value is '' | (EMPTY)
       } else {
@@ -41,7 +45,10 @@ export const Search = ({
     }, 300);
 
     return () => clearTimeout(debounceFn);
-  }, [query, searchParams, pathname, router]);
+
+    // Just rerender if query value change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   return (
     <div className="flex-between w-full flex-[2] gap-2 rounded-md border border-input px-4 py-2 has-[:autofill]:bg-[rgb(232,240,254)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background">

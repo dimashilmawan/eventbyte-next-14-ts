@@ -11,10 +11,10 @@ export const navLinks = [
     label: "My Profile",
     route: "/profile",
   },
-  {
-    label: "Test",
-    route: "/test",
-  },
+  // {
+  //   label: "Test",
+  //   route: "/test",
+  // },
 ];
 
 export const eventDefaultValues = {

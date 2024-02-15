@@ -23,7 +23,11 @@ export default async function Page({
   const orders = await getOrdersByUser({ userId, page: ordersPage });
   const orderedEvents = orders?.data.map((order) => order.event) || [];
 
-  const organizedEvents = await getEventsByUser({ userId, page: eventsPage });
+  const organizedEvents = await getEventsByUser({
+    userId,
+    page: eventsPage,
+    limit: 3,
+  });
   return (
     <>
       <section>
@@ -38,7 +42,6 @@ export default async function Page({
         <Container className="py-8 md:py-10">
           <Collection
             data={orderedEvents}
-            limit={3}
             page={ordersPage}
             emptyTitle="No event tickets purchased yet"
             emptySubtitle="No worries - plenty of exciting events to explore!"
@@ -60,7 +63,6 @@ export default async function Page({
         <Container className="py-8 md:py-10">
           <Collection
             data={organizedEvents.data}
-            limit={3}
             page={eventsPage}
             emptyTitle="No events have been created yet"
             emptySubtitle="Go create some event now"

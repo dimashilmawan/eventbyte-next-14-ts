@@ -22,6 +22,7 @@ export const Header = () => {
             <UserButton
               appearance={{ elements: { avatarBox: "w-9 h-9" } }}
               afterSignOutUrl="/"
+              afterMultiSessionSingleSignOutUrl="/"
             />
             <MobileNav />
           </SignedIn>

@@ -176,8 +176,8 @@ export const getAllEvents = async ({
       .skip(skipAmout)
       .limit(limit);
 
-    const events = await populateEvent(eventsQuery);
-    const eventsCount = await Event.countDocuments();
+    const events: PopulatedEvent[] = await populateEvent(eventsQuery);
+    const eventsCount = await Event.find(condition).countDocuments();
 
     return {
       data: JSON.parse(JSON.stringify(events)),
@@ -213,7 +213,7 @@ export const getEventsByCategory = async ({
       .limit(limit);
 
     const events = await populateEvent(eventsQuery);
-    const eventsCount = await Event.countDocuments();
+    const eventsCount = await Event.find(condition).countDocuments();
 
     return {
       data: JSON.parse(JSON.stringify(events)),
@@ -247,7 +247,7 @@ export const getEventsByUser = async ({
       .limit(limit);
 
     const events = await populateEvent(eventsQuery);
-    const eventsCount = await Event.countDocuments();
+    const eventsCount = await Event.find(condition).countDocuments();
 
     return {
       data: JSON.parse(JSON.stringify(events)),

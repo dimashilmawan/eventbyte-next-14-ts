@@ -1,13 +1,10 @@
 import { PopulatedEvent } from "@/lib/actions/event.action";
-import { IEvent } from "@/lib/database/models/event.model";
-import { Container } from "./container";
 import { Card } from "./card";
 import { Pagination } from "./pagination";
 
 type CollectionProps = {
   data: PopulatedEvent[];
   page: number;
-  limit: number;
   emptyTitle: string;
   emptySubtitle: string;
   totalPages?: number;
@@ -27,7 +24,7 @@ export const Collection = ({
   return (
     <>
       {data.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-8">
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
             {data.map((event) => {
               const hasOrderLink = collectionType === "events-organized";
@@ -45,7 +42,7 @@ export const Collection = ({
           </ul>
           {totalPages > 1 && (
             <Pagination
-              page={page}
+              currentPage={page}
               totalPages={totalPages}
               urlParamsName={urlParamsName}
             />

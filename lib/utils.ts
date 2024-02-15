@@ -158,9 +158,11 @@ export const removeKeysFromQuery = ({
 
 type FormUrlQueryParams = {
   params: string;
-  value: string;
   pathname: string;
   key: string;
+  value: string;
+  key2?: string;
+  value2?: string;
 };
 
 export const formUrlQuery = ({
@@ -168,9 +170,13 @@ export const formUrlQuery = ({
   value,
   key,
   pathname,
+  key2,
+  value2,
 }: FormUrlQueryParams) => {
   const currentUrl = queryString.parse(params);
   currentUrl[key] = value;
+
+  if (key2 && value2) currentUrl[key2] = value2;
 
   return queryString.stringifyUrl(
     { url: pathname, query: currentUrl },

@@ -65,12 +65,13 @@ export default async function Page({
     userId,
   });
 
+  const page = Number(searchParams.page) || 1;
+
   const relatedEvents = await getEventsByCategory({
     eventId: id,
     categoryId: event.category._id,
+    page,
   });
-
-  const page = Number(searchParams.page) || 1;
 
   return (
     <>
@@ -138,7 +139,6 @@ export default async function Page({
             emptyTitle="No Related Events Found"
             emptySubtitle="Come back later!"
             collectionType="all-events"
-            limit={3}
             page={page}
             totalPages={relatedEvents.totalPages}
           />
