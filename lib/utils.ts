@@ -176,6 +176,8 @@ export const formUrlQuery = ({
   const currentUrl = queryString.parse(params);
   currentUrl[key] = value;
 
+  console.log({ currentUrl });
+
   if (key2 && value2) currentUrl[key2] = value2;
 
   return queryString.stringifyUrl(

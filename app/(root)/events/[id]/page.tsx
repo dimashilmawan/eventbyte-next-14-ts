@@ -80,15 +80,17 @@ export default async function Page({
         <Container className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <ImageCover imageUrl={event.imageUrl} device="desktop" />
 
-          <div className="space-y-6 py-10 md:px-6">
-            <h1 className="text-2xl font-bold">{event.title}</h1>
+          <div className="space-y-6 py-10 md:px-6 md:py-14">
+            <h1 className="text-center text-2xl font-bold text-[#00244c] md:text-left">
+              {event.title}
+            </h1>
 
-            <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <div className="space-x-2">
-                <span className="inline-block rounded-full bg-green-500/10 px-4 py-1.5 font-semibold text-green-600">
+            <div className="flex flex-col items-center gap-3 md:items-start lg:flex-row lg:items-center lg:gap-6">
+              <div className="flex items-center gap-2">
+                <span className="rounded-md bg-green-500/10 px-4 py-1.5 font-semibold text-green-600">
                   {event.isFree ? "Free" : `$${event.price}`}
                 </span>
-                <span className="inline-block rounded-full bg-gray-500/10 px-4 py-1.5 font-semibold text-gray-600">
+                <span className="rounded-md bg-gray-500/10 px-4 py-1.5 font-semibold text-gray-600">
                   {event?.category?.name}
                 </span>
               </div>
@@ -103,7 +105,7 @@ export default async function Page({
             <CheckoutButton event={event} hasOrdered={hasOrdered} />
 
             <div className="space-y-3 ">
-              <div className="flex items-center gap-3">
+              <div className="flex-center gap-3 md:justify-start">
                 <div>
                   <CalendarIcon className="h-5 w-5 text-orange-500" />
                 </div>
@@ -112,7 +114,7 @@ export default async function Page({
                   {format(event.endDateTime, "h:mm a")}
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex-center gap-3 md:justify-start">
                 <div>
                   <MapPinIcon className="h-5 w-5 text-orange-500" />
                 </div>
@@ -120,7 +122,7 @@ export default async function Page({
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3 text-balance text-center md:text-wrap md:text-left">
               <h3 className="text-xl font-semibold text-gray-600">
                 What you&apos;ll learn
               </h3>
@@ -133,7 +135,9 @@ export default async function Page({
       </section>
       <section>
         <Container className="space-y-4 py-10">
-          <h2 className="text-2xl font-bold">Related Event</h2>
+          <h2 className="text-center text-2xl font-bold md:text-left">
+            Related Event
+          </h2>
           <Collection
             data={relatedEvents.data}
             emptyTitle="No Related Events Found"

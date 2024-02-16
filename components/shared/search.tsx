@@ -22,8 +22,6 @@ export const Search = ({
 
       // if query value is not '' | (NOT EMPTY)
       if (query) {
-        console.log("useEffect");
-
         newUrl = formUrlQuery({
           params: searchParams.toString(),
           pathname,

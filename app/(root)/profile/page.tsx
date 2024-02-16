@@ -32,7 +32,7 @@ export default async function Page({
     <>
       <section>
         <div className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-          <Container className="flex-between py-8 md:py-10">
+          <Container className="flex-between flex-col gap-4 py-6 md:flex-row md:py-10">
             <h3 className="text-3xl font-bold text-[#00244c]">My Tickets</h3>
             <Button asChild size={"lg"}>
               <Link href="/#events">Explore more events</Link>
@@ -53,7 +53,7 @@ export default async function Page({
       </section>
       <section id="organized-events">
         <div className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-          <Container className="flex-between py-8 md:py-10">
+          <Container className="flex-between flex-col gap-4 py-6 md:flex-row md:py-10">
             <h3 className="text-3xl font-bold text-[#00244c]">
               Organized Events
             </h3>

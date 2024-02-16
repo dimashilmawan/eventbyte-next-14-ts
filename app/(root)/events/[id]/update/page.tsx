@@ -26,13 +26,13 @@ export default async function Page({
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-        <Container className=" py-4 md:max-w-xl md:py-6">
+        <Container className="!max-w-xl py-6">
           <h3 className="text-center text-2xl font-bold text-[#00244c] md:text-left">
             Update Event
           </h3>
         </Container>
       </section>
-      <Container className="!max-w-xl pb-8 pt-4 md:max-w-xl md:pb-16 md:pt-6">
+      <Container className="!max-w-xl pb-8 pt-4 md:pb-16 md:pt-6">
         <EventForm type="update" userId={userId} event={event} />
       </Container>
     </>

@@ -46,7 +46,7 @@ export default async function Page({
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-        <Container className="py-4 md:py-6">
+        <Container className="py-8 md:py-10">
           <h3 className="text-center text-2xl font-bold text-[#00244c] md:text-left">
             Event Order management
           </h3>

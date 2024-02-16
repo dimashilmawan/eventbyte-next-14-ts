@@ -48,7 +48,7 @@ export const CheckoutButton = ({
     <>
       <SignedIn>
         {isEventCreator ? (
-          <Button asChild>
+          <Button asChild className="w-full lg:w-fit">
             <Link href="/profile#organized-events">Organized events</Link>
           </Button>
         ) : hasOrdered ? (
@@ -57,7 +57,7 @@ export const CheckoutButton = ({
           </p>
         ) : (
           <Button
-            className="rounded-full"
+            className="w-full lg:w-fit"
             size="lg"
             onClick={handleCheckoutPriced}
           >
@@ -66,7 +66,7 @@ export const CheckoutButton = ({
         )}
       </SignedIn>
       <SignedOut>
-        <Button asChild className="rounded-full" size="lg">
+        <Button asChild className="w-full  lg:w-fit" size="lg">
           <Link href="/sign-in">Checkout</Link>
         </Button>
       </SignedOut>

@@ -2,7 +2,7 @@
 import { getAllCategories } from "@/lib/actions/category.action";
 import { ICategory } from "@/lib/database/models/category.model";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { selectComponentStyles } from "./dropdown";
@@ -20,7 +20,7 @@ const createOption = ({ _id, name }: ICategory): Option => ({
 export const CategoryFilter = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
-  const searchParams = useParams();
+  const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -76,7 +76,7 @@ export const CategoryFilter = () => {
       instanceId="category-filter"
       classNames={{
         ...selectComponentStyles,
-        container: () => "!flex-1",
+        container: () => "!flex-1 w-full",
       }}
     />
   );

@@ -30,40 +30,40 @@ export default async function Page({
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-        <Container className=" grid grid-cols-1 items-center gap-8 py-6 md:grid-cols-2 md:gap-4 md:py-10">
-          <div className="">
-            <h1 className="text-4xl font-bold ">
+        <Container className=" grid grid-cols-1 items-center gap-0 pt-10 md:grid-cols-2 md:gap-4  md:py-14">
+          <div>
+            <h1 className="text-center text-3xl font-bold md:text-left md:text-4xl lg:text-5xl">
               Host, Connect, Celebrate: Your Events, Our Platform!
             </h1>
-            <p className="mt-6 text-xl">
+            <p className="mt-6 text-center text-xl md:text-left lg:text-2xl">
               Book and learn helpful tips from 3,168+ mentors in world-class
               companies with our global community.
             </p>
             <Button
               size="lg"
               asChild
-              className="mt-9 w-full rounded-full md:w-fit "
+              className="mt-9 w-full rounded-full text-base md:w-fit md:text-sm"
             >
               <Link href="#events">Explore now</Link>
             </Button>
           </div>
-          <div className="relative h-[100vw] md:h-[33vw]">
+          <div className="relative h-[100vw] md:h-full">
             <Image
               alt="hero image"
-              src="/assets/images/confrence.png"
+              src="/assets/images/confrence-crop.png"
               fill
               sizes="97vw"
-              className=" object-contain object-center"
+              className="object-contain object-center"
             />
           </div>
         </Container>
       </section>
       <section id="events">
         <Container className=" space-y-8 py-8">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl font-bold md:text-3xl">
             Trust by <br /> Thousands of Events
           </h2>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center gap-3 md:flex-row">
             <Search />
             <CategoryFilter />
           </div>

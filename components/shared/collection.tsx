@@ -49,9 +49,13 @@ export const Collection = ({
           )}
         </div>
       ) : (
-        <div className="flex-center flex-col space-y-3 rounded-md bg-gray-50 py-24">
-          <h3 className="text-3xl font-bold">{emptyTitle}</h3>
-          <p className="text-gray-600">{emptySubtitle}</p>
+        <div className="flex-center flex-col space-y-3 rounded-md bg-gray-50 px-4 py-24">
+          <h3 className="text-balance text-center text-xl font-bold md:text-3xl">
+            {emptyTitle}
+          </h3>
+          <p className="text-balance text-center text-gray-600">
+            {emptySubtitle}
+          </p>
         </div>
       )}
     </>

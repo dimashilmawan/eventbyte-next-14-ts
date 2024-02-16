@@ -10,7 +10,7 @@ import { Container } from "./container";
 export const Header = () => {
   return (
     <header className="w-full border-b">
-      <Container className="flex-between wrapper relative h-[4.250rem] ">
+      <Container className="flex-between wrapper relative h-20 md:h-[4.250rem]">
         <Logo />
         <SignedIn>
           <nav className="absolute left-1/2 top-1/2 hidden w-fit -translate-x-1/2 -translate-y-1/2 md:flex">
@@ -20,7 +20,9 @@ export const Header = () => {
         <div className="flex-center gap-3 ">
           <SignedIn>
             <UserButton
-              appearance={{ elements: { avatarBox: "w-9 h-9" } }}
+              appearance={{
+                elements: { avatarBox: "w-10 h-10 md:h-9 md:w-9" },
+              }}
               afterSignOutUrl="/"
               afterMultiSessionSingleSignOutUrl="/"
             />

@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
-        <Container className="!max-w-xl py-4 md:py-6">
+        <Container className="!max-w-xl py-6">
           <h3 className="text-center text-2xl font-bold text-[#00244c] md:text-left">
             Create Event
           </h3>
