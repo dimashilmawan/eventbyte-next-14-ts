@@ -1,10 +1,12 @@
+// check this out https://www.youtube.com/watch?v=nsMzWA6_3RA
+// for proper handle server action and error
+// the code bellow not proper handler server action and error
+
 import { CheckoutButton } from "@/components/shared/checkout-button";
 import { Collection } from "@/components/shared/collection";
 import { Container } from "@/components/shared/container";
 import { getEventById, getEventsByCategory } from "@/lib/actions/event.action";
 import { hasUserOrderedForEvent } from "@/lib/actions/order.action";
-import { connectToDB } from "@/lib/database";
-import Order from "@/lib/database/models/order.model";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";

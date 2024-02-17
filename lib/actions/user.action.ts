@@ -1,3 +1,7 @@
+// check this out https://www.youtube.com/watch?v=nsMzWA6_3RA
+// for proper handle server action and error
+// the code bellow not proper handler server action and error
+
 "use server";
 
 import { revalidatePath } from "next/cache";
