@@ -9,7 +9,6 @@ import { Search } from "@/components/shared/search";
 import { Button } from "@/components/ui/button";
 import { getAllEvents } from "@/lib/actions/event.action";
 import Image from "next/image";
-import Link from "next/link";
 
 export default async function Page({
   searchParams,
@@ -48,7 +47,7 @@ export default async function Page({
               asChild
               className="mt-9 w-full rounded-full text-base md:w-fit md:text-sm"
             >
-              <Link href="#events">Explore now</Link>
+              <a href="#events">Explore now</a>
             </Button>
           </div>
           <div className="relative h-[100vw] md:h-full">

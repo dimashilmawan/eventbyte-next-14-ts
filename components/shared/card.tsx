@@ -30,7 +30,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
       {isEventCreator && hasOrderLink && !hidePrice && (
         <div className="absolute right-3 top-3 z-50 flex flex-col gap-1.5 rounded-md bg-white p-1.5 text-muted-foreground">
           <Button asChild className="h-6 w-6 p-0" variant="ghost">
-            <Link href={`/events/${event._id}/update`} className="">
+            <Link href={`/events/${event._id}/update`} prefetch>
               <SquarePenIcon className="h-4 w-4" />
             </Link>
           </Button>
@@ -39,6 +39,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
       )}
       <div className="flex h-full flex-col">
         <Link
+          prefetch
           href={`/events/${event._id}`}
           className="relative block aspect-video overflow-hidden"
         >
@@ -64,7 +65,7 @@ export const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           <p className="mt-2 font-medium text-gray-500">
             {format(event.startDateTime, "EEE, MMM d, h:mm a")}
           </p>
-          <Link href={`/events/${event._id}`}>
+          <Link href={`/events/${event._id}`} prefetch>
             <h1 className="mt-4 text-xl font-bold decoration-primary-500 decoration-2  hover:text-primary-500 hover:underline">
               {event.title}
             </h1>

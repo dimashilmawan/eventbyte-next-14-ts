@@ -9,7 +9,7 @@ export default function NotFound() {
         Sorry, the page you are looking for might be in another castle.
       </p>
       <Button size={"lg"} asChild>
-        <Link href="/" className="mt-5">
+        <Link href="/" className="mt-5" prefetch>
           Return Home
         </Link>
       </Button>

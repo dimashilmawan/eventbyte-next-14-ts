@@ -30,7 +30,9 @@ export const Header = () => {
           </SignedIn>
           <SignedOut>
             <Button asChild size="lg" className="rounded-full">
-              <Link href="/sign-in">Login</Link>
+              <Link href="/sign-in" prefetch>
+                Login
+              </Link>
             </Button>
           </SignedOut>
         </div>

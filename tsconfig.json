@@ -27,6 +27,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "prettier.config.js",
+    "components/shared/loading-spinner.tsx",
   ],
   "exclude": ["node_modules"],
 }

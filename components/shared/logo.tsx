@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Logo = () => {
   return (
-    <Link href="/">
+    <Link href="/" prefetch>
       <div className="flex-center gap-2">
         <Image
           src="/assets/images/eventbyte-logo.png"

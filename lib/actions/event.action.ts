@@ -145,6 +145,54 @@ const getCategoryByName = async (name: string): Promise<ICategory | null> => {
   return Category.findOne({ name: { $regex: name, $options: "i" } });
 };
 
+// export const getAllEvents = async ({
+//   query,
+//   category,
+//   page,
+//   limit = 6,
+// }: GetAllEventsParams): Promise<{
+//   data: PopulatedEvent[];
+//   totalPages: number;
+// }> => {
+//   try {
+//     await connectToDB();
+
+//     let fetchedCategory;
+//     if (category) {
+//       fetchedCategory = await getCategoryByName(category);
+//     }
+
+//     const titleCondition = query
+//       ? { title: { $regex: query, $options: "i" } }
+//       : {};
+//     const categoryCondition = category
+//       ? {
+//           category: fetchedCategory?._id,
+//         }
+//       : {};
+//     const condition = {
+//       $and: [titleCondition, categoryCondition],
+//     };
+//     const skipAmout = (Number(page) - 1) * limit;
+
+//     const eventsQuery = Event.find(condition)
+//       .sort({ createdAt: "desc" })
+//       .skip(skipAmout)
+//       .limit(limit);
+
+//     const events: PopulatedEvent[] = await populateEvent(eventsQuery);
+//     const eventsCount = await Event.find(condition).countDocuments();
+
+//     return {
+//       data: JSON.parse(JSON.stringify(events)),
+//       totalPages: Math.ceil(eventsCount / limit),
+//     };
+//   } catch (error) {
+//     handleError(error);
+//     throw error;
+//   }
+// };
+
 export const getAllEvents = async ({
   query,
   category,

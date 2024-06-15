@@ -35,7 +35,7 @@ export default async function Page({
           <Container className="flex-between flex-col gap-4 py-6 md:flex-row md:py-10">
             <h3 className="text-3xl font-bold text-[#00244c]">My Tickets</h3>
             <Button asChild size={"lg"}>
-              <Link href="/#events">Explore more events</Link>
+              <a href="/#events">Explore more events</a>
             </Button>
           </Container>
         </div>
@@ -58,7 +58,9 @@ export default async function Page({
               Organized Events
             </h3>
             <Button asChild size={"lg"}>
-              <Link href="/events/create">Create Event</Link>
+              <Link href="/events/create" prefetch>
+                Create Event
+              </Link>
             </Button>
           </Container>
         </div>

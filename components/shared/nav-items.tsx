@@ -14,7 +14,9 @@ export const NavItems = () => {
             key={link.route}
             className={`${isActive ? "text-primary-500" : ""} whitespace-nowrap text-lg font-medium`}
           >
-            <Link href={link.route}>{link.label}</Link>
+            <Link href={link.route} prefetch>
+              {link.label}
+            </Link>
           </li>
         );
       })}

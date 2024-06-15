@@ -49,7 +49,9 @@ export const CheckoutButton = ({
       <SignedIn>
         {isEventCreator ? (
           <Button asChild className="w-full lg:w-fit">
-            <Link href="/profile#organized-events">Organized events</Link>
+            <Link href="/profile#organized-events" prefetch>
+              Organized events
+            </Link>
           </Button>
         ) : hasOrdered ? (
           <p className="w-fit bg-primary-500 px-4 py-1 font-semibold text-white">
@@ -67,7 +69,9 @@ export const CheckoutButton = ({
       </SignedIn>
       <SignedOut>
         <Button asChild className="w-full  lg:w-fit" size="lg">
-          <Link href="/sign-in">Checkout</Link>
+          <Link href="/sign-in" prefetch>
+            Checkout
+          </Link>
         </Button>
       </SignedOut>
     </>
